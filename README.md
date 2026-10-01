@@ -2,6 +2,8 @@
 
 Retrouver les photos d'un album où l'on apparaît, en déposant une photo de soi. Projet du module PRO 8501 (projet informatique en Python, FISA 2A, Télécom SudParis).
 
+Un cahier des charges plus complet est disponible dans `docs/Cahier des charges - INTêtes.pdf`.
+
 ## Où en est le code
 
 | Partie | Tâche du cahier des charges | État |
