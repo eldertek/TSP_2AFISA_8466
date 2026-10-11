@@ -12,6 +12,7 @@ Installation de Docker Desktop et de Windows Subsystem for Linux afin de mettre 
 
 Nous devons réfléchir au fait de choisir entre un seul Dockerfile ou plusieurs. L'avantage de plusieurs Dockerfiles est d'avoir des images adaptées à nos différents cas d'usage (site/admin/workers) et plus légères individuellement. L'inconvénient est que nous devrons segmenter et séparer notre code. En revanche, on peut simplifier en mettant tout dans une seule image et affiner les comportements via des lignes de commande.
 
-Marin a quitté le projet mais il détient les accès au repository. On a donc décidé de recréer le repo sur mon compte afin de pouvoir le mettre à disposition des encadrants. 
+Marin a quitté le projet mais il détient les accès au repository. On a donc décidé de recréer le repo sur mon compte (eldertek/TSP_2AFISA_8466) afin de pouvoir le mettre à disposition des encadrants. Les issues ne peuvent pas être transférées d'un compte à un autre, on les a donc recopiées avec un lien vers les anciennes, et on a remis les mêmes assignations.
 
-On a ajouté l'application indexing et j'ai développé une fonction pour reconnaître les visages.
+On a ajouté l'application indexing et j'ai développé une fonction pour détecter les visages avec le détecteur YuNet d'OpenCV (la reconnaissance, avec les empreintes SFace, viendra ensuite). J'ai également mis en place un formulaire pour uploader les images et les passer au détecteur. Le résultat est affiché sur la page /indexing/, indiquant le nombre de visages détectés et leurs coordonnées. 
+Mise en place du formatage automatique avec black et isort via pre-commit, et explication dans le README.
