@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Indexing</title>
+</head>
+<body>
+    <h1>Indexing</h1>
+    <p>Welcome to the Indexing page!</p>
+    
+    <h2>Indexing Form</h2>
+
+    {% if request.method == 'POST' %}
+        <p>We have detected {{ detected_faces|length }} faces. They are located at: {{ detected_faces }}</p>
+    {% else %}
+    <form method="post" enctype="multipart/form-data" action="{% url 'indexing:index' %}">
+        {% csrf_token %}
+        <label for="photo">Please upload a photo:</label>
+        <input type="file" id="photo" name="photo" required>
+        <button type="submit">Index</button>
+    </form>
+
+    {% endif %}
+
+</body>
+</html>
