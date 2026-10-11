@@ -74,3 +74,24 @@ pytest
 ```
 
 L'album de test (`tests/donnees`) est fait de photos de la NASA de l'équipage d'Apollo 11, dans le domaine public (sources dans `tests/donnees/SOURCES.md`). Aucune photo d'étudiant n'est utilisée.
+
+## Formatage du code
+
+Le code est formaté avec **black** et les imports sont triés avec **isort** (réglé sur le profil black dans `pyproject.toml`, pour que les deux outils ne se contredisent pas). Les deux tournent automatiquement à chaque `git commit`, grâce à **pre-commit** (`.pre-commit-config.yaml`).
+
+À faire une fois, après avoir cloné le dépôt et activé l'environnement virtuel :
+
+```bash
+pip install pre-commit
+pre-commit install
+```
+
+Ensuite, si black ou isort modifie un fichier pendant un commit, le commit s'arrête : il suffit de relire les changements, de refaire `git add`, puis de relancer `git commit`.
+
+Pour formater tout le projet d'un coup :
+
+```bash
+pre-commit run --all-files
+```
+
+Pour mettre à jour les versions de black et d'isort : `pre-commit autoupdate`.

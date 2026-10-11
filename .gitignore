@@ -5,3 +5,6 @@ __pycache__/
 *.part
 index*.jsonl
 db.sqlite3
+
+# Vscode settings
+.vscode/
