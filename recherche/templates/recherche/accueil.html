@@ -9,6 +9,14 @@
   <main class="mx-auto max-w-2xl p-8">
     <h1 class="text-3xl font-bold text-indigo-600">Retrouve tes photos</h1>
     <p class="mt-2 text-slate-600">Dépose une photo de toi, on cherche dans les albums du club.</p>
+    <form method="post" enctype="multipart/form-data" action="{% url 'accueil' %}">
+      {% csrf_token %}
+      <input type="file" name="photo" required>
+      <button type="submit">Envoyer</button>
+    </form>
+    {% if resultats %}
+    <p> {{resultats|length}} résultats trouvés par l'algorithme.</p>
+    {% endif %}
   </main>
 </body>
 </html>
