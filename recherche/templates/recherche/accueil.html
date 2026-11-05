@@ -6,16 +6,26 @@
   <title>INTêtes</title>
 </head>
 <body class="bg-slate-50 text-slate-900">
-  <main class="mx-auto max-w-2xl p-8">
-    <h1 class="text-3xl font-bold text-indigo-600">Retrouve tes photos</h1>
-    <p class="mt-2 text-slate-600">Dépose une photo de toi, on cherche dans les albums du club.</p>
+  <main class="mx-auto max-w-6xl p-8">
+    <h1 class="text-3xl font-bold text-black">Retrouve tes photos avec </h1><h1 class="text-3xl font-bold text-lime-500">INTêtes</h1>
+    <p class="mt-2 text-slate-600">Dépose une photo de toi pour retrouver les moments où tu apparaîs !</p>
     <form method="post" enctype="multipart/form-data" action="{% url 'accueil' %}">
       {% csrf_token %}
       <input type="file" name="photo" required>
       <button type="submit">Envoyer</button>
     </form>
     {% if resultats %}
-    <p> {{resultats|length}} résultats trouvés par l'algorithme.</p>
+    <div class="mt-4 p-4 grid-cols-3 grid gap-3 border rounded">
+      {% for resultat in resultats %}
+        <div class="p-4 border rounded">
+          <div>{{ resultat.photo }}</div>
+          <div>{{ resultat.evenement }}</div>
+          <div>{{ resultat.date }}</div>
+          <div>{{ resultat.score }}</div>
+
+        </div>
+      {% endfor %}  
+      </div>
     {% endif %}
   </main>
 </body>
