@@ -45,3 +45,14 @@ Le nouveau cahier des charges a été mis à jour sur Moodle pour le 18/10.
 RAS car absente. 
 
 [05/11/26]
+Objectif du jour : finir la base de l'interface de T5 (formulaire, résultats).
+
+Ce que j'ai fait : 
+    - la fausse fonction rechercher(photo) dans rechercher/service.py qui renvoie une liste de dico avec les éléments "importants" (nom de la photo, nom de l'événement, date de publication et score de ressemblance)
+    - le formulaire de dépôt de photo dans accueil.html
+    - la vue accueil qui gère le POST, récupère le fichier et appelle rechercher()
+    - l'affichage des résultats en cartes Tailwind
+
+Problèmes rencontrés et les solutions que j'ai trouvé : 
+    - beaucoup de problèmes liés au fait que c'est ma première prise en main de django et tailwind (oubli de fermeture d'un {% for %}, resultat.nom qui n'affichait rien pcq c'était pas le bon nom, grid appliqué sur les mauvais conteneurs, etc.)
+
