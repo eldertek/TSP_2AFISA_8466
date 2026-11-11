@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 
 from recherche.service import rechercher
@@ -5,6 +6,7 @@ from recherche.service import rechercher
 # Create your views here.
 
 
+@login_required
 def accueil(request):
     if request.method == "POST":
         photo = request.FILES.get("photo")
