@@ -26,3 +26,33 @@ class Photo(models.Model):
 
     def __str__(self):
         return f"Photo uploaded by {self.uploaded_by} on {self.uploaded_at.strftime('%Y-%m-%d %H:%M:%S')}"
+
+
+class Person(models.Model):
+    name = models.CharField(max_length=100, blank=True)
+    user = models.OneToOneField(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="person",
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.name if self.name else f"Person {self.pk}"
+
+
+class Face(models.Model):
+    photo = models.ForeignKey(Photo, on_delete=models.CASCADE, related_name="faces")
+    person = models.ForeignKey(
+        Person, on_delete=models.CASCADE, null=True, blank=True, related_name="faces"
+    )
+    embedding = models.BinaryField()
+    box_x = models.IntegerField()
+    box_y = models.IntegerField()
+    box_w = models.IntegerField()
+    box_h = models.IntegerField()
+
+    def __str__(self):
+        return f"Face {self.pk} in {self.photo.pk}"
