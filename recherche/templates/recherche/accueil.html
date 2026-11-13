@@ -7,12 +7,17 @@
 </head>
 <body class="bg-slate-50 text-slate-900">
   <main class="mx-auto max-w-6xl p-8">
+    <p>Connecté en tant que {{ user.username }}</p>
+    <form method="post" action="{%url 'logout' %}">
+      {% csrf_token %}
+      <button type="submit" class="bg-lime-500 text-white px-4 py-2 rounded">Se déconnecter</button>
+    </form>
     <h1 class="text-3xl font-bold text-black">Retrouve tes photos avec </h1><h1 class="text-3xl font-bold text-lime-500">INTêtes</h1>
     <p class="mt-2 text-slate-600">Dépose une photo de toi pour retrouver les moments où tu apparaîs !</p>
     <form method="post" enctype="multipart/form-data" action="{% url 'accueil' %}">
       {% csrf_token %}
       <input type="file" name="photo" required>
-      <button type="submit">Envoyer</button>
+      <button type="submit" class="bg-lime-500 text-white px-4 py-2 rounded">Envoyer</button>
     </form>
     {% if resultats %}
     <div class="mt-4 p-4 grid-cols-3 grid gap-3 border rounded">

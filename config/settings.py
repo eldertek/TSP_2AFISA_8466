@@ -151,5 +151,6 @@ MAILERS = {
 
 
 LOGIN_REDIRECT_URL = "accueil"
+LOGOUT_REDIRECT_URL = "login"
 
 CSRF_TRUSTED_ORIGINS = ["http://localhost:8080", "http://127.0.0.1:8080"]
