@@ -1,49 +1,58 @@
+import cv2
+import numpy as np
+
+from indexing.faces import detect_faces, extract_embedding
+from indexing.models import Face
+
+
 def rechercher(photo):
     """
-    Fausse fonction de recherche d'images.
-    Elle me sert à retourner les informations dont j'ai besoin pour test le front.
-    Elle renvoie une liste avec un dictionnaire par photo trouvée.
-    Dans chaque dictionnaire on a 4 clefs :
-        - photo : le nom ou chemin de la photo
-        - evenement : le nom de l'evenement/album
-        - date : la date de publication de l'album
-        - score : un nombre entre 0 et 1 qui représente la ressemblance
+    Search for similar faces in the database based on the provided photo.
+
+    @param photo: The uploaded photo file.
     """
-    return [
-        {
-            "photo": "photo1.jpg",
-            "evenement": "Gala - Stand",
-            "date": "2026-02-26",
-            "score": 0.8,
-        },
-        {
-            "photo": "photo2.jpg",
-            "evenement": "Gala - Volant",
-            "date": "2026-02-26",
-            "score": 0.7,
-        },
-        {
-            "photo": "photo1.jpg",
-            "evenement": "Gala - Volant",
-            "date": "2026-02-26",
-            "score": 0.9,
-        },
-        {
-            "photo": "photo1.jpg",
-            "evenement": "Soirée Hypnos - Volant",
-            "date": "2026-02-03",
-            "score": 0.6,
-        },
-        {
-            "photo": "photo46.jpg",
-            "evenement": "Soirée Parainnage - Volant",
-            "date": "2025-10-18",
-            "score": 0.8,
-        },
-        {
-            "photo": "photo67.jpg",
-            "evenement": "Gala - Stand",
-            "date": "2026-02-26",
-            "score": 0.9,
-        },
-    ]
+
+    image_bytes = photo.read()
+    img = np.frombuffer(image_bytes, np.uint8)
+    img = cv2.imdecode(img, cv2.IMREAD_COLOR)
+
+    detected_faces = detect_faces(img)
+
+    results = []
+
+    if len(detected_faces) == 0:
+        return results
+    else:
+        query_bytes = extract_embedding(img, detected_faces[0])
+        query_embedding = np.frombuffer(query_bytes, dtype=np.float32).reshape(1, -1)
+        faces = Face.objects.select_related("photo", "photo__album").all()
+
+        recognizer = cv2.FaceRecognizerSF.create(
+            "models/face_recognition_sface_2021dec.onnx", ""
+        )
+
+        for face in faces:
+            db_embedding = np.frombuffer(face.embedding, dtype=np.float32).reshape(
+                1, -1
+            )
+            score = recognizer.match(
+                query_embedding, db_embedding, cv2.FaceRecognizerSF_FR_COSINE
+            )
+            if score >= 0.363:
+                results.append(
+                    {
+                        "photo": face.photo.image.url,
+                        "event": (
+                            face.photo.album.name if face.photo.album else "no-album"
+                        ),
+                        "date": (
+                            face.photo.album.event_date.strftime("%Y-%m-%d")
+                            if face.photo.album
+                            else face.photo.uploaded_at.strftime("%Y-%m-%d")
+                        ),
+                        "score": round(float(score), 2),
+                    }
+                )
+
+        results.sort(key=lambda x: x["score"], reverse=True)
+        return results
