@@ -28,3 +28,5 @@ J'ai ensuite mis en place l'architecture Docker complète du projet avec trois c
 
 ## 13 / 11 / 2026
 J'ai complété la partie détection avec l'extraction des empreintes biométriques grâce au modèle SFace d'OpenCV dans indexing/faces.py. Après la détection par YuNet, chaque visage est aligné et découpé avec alignCrop puis transformé en un vecteur de 128 flottants converti en binaire (512 octets). J'ai ensuite mis à jour la vue d'indexation (protégée par login_required) pour enregistrer la photo déposée et chacun des visages détectés avec ses coordonnées et son empreinte directement dans la base PostgreSQL.
+
+J'ai ensuite développé le moteur de recherche par similarité dans recherche/service.py pour remplacer les fausses données de test. Lorsqu'un utilisateur dépose une photo, on détecte son visage et on extrait son empreinte SFace, puis on la compare avec la distance cosinus d'OpenCV à l'ensemble des empreintes stockées en base (récupérées en une seule requête grâce à select_related sur la photo et l'album). Les résultats dépassant le seuil de reconnaissance (0.363) sont triés par score décroissant et affichés dans la galerie.
