@@ -56,3 +56,20 @@ Ce que j'ai fait :
 Problèmes rencontrés et les solutions que j'ai trouvé : 
     - beaucoup de problèmes liés au fait que c'est ma première prise en main de django et tailwind (oubli de fermeture d'un {% for %}, resultat.nom qui n'affichait rien pcq c'était pas le bon nom, grid appliqué sur les mauvais conteneurs, etc.)
 
+[07/11/26]
+Objectif du jour : commencer T8 (c'est la connexion avec l'adresse mail de l'école).
+
+Ce que j'ai fait :
+    - mise à jour du cahier des charges de référence : on travaille sur la dernière version du cahier des charges (celle du 15/10) ce qui change les dates de fin des étapes. 
+    - ajout des URLs de connexion de Django sous accounts/ dans config/urls.py
+    - création du template de la page de connexion registration/login.html
+    - création d'un compte de test avec createsuperuser, résultat : la connexion fonctionne avec nom utilisateur + mdp et non adresse mail pour l'instant
+
+Problèmes rencontrés et les solutions que j'ai trouvé :
+    - erreur 404 lors de la création de la page de connexion : l'url n'existait pas, il fallait inclure les urls d'authentification de Django
+    - erreur de TemplateDoesNotExist : c'est normal, la vue de connexion est fournie par Django mais pas le template HTML, je l'ai donc écris moi même
+    - pour l'instant on se connecte avec son nom d'utilisateur, rien n'empeche quelqu'un d'extérieur à l'école de créer un compte et de se connecter, conformément au cahier des charges il faut se connecter avec l'adresse de l'école (à faire pour la prochaine séance)
+
+Reste à faire : 
+    - faire en sorte qu'on puisse se connecter uniquement avec l'adresse mail de l'école
+
