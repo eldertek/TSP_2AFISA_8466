@@ -2,10 +2,10 @@ import cv2
 import numpy as np
 
 from indexing.faces import detect_faces, extract_embedding
-from indexing.models import Face
+from indexing.models import Face, Person
 
 
-def rechercher(photo):
+def research(photo, user=None):
     """
     Search for similar faces in the database based on the provided photo.
 
@@ -31,6 +31,12 @@ def rechercher(photo):
             "models/face_recognition_sface_2021dec.onnx", ""
         )
 
+        person = None
+        if user and user.is_authenticated:
+            person, _ = Person.objects.get_or_create(
+                user=user, defaults={"name": user.username}
+            )
+
         for face in faces:
             db_embedding = np.frombuffer(face.embedding, dtype=np.float32).reshape(
                 1, -1
@@ -39,6 +45,9 @@ def rechercher(photo):
                 query_embedding, db_embedding, cv2.FaceRecognizerSF_FR_COSINE
             )
             if score >= 0.363:
+                if person and face.person_id != person.id:
+                    face.person = person
+                    face.save(update_fields=["person"])
                 results.append(
                     {
                         "photo": face.photo.image.url,
