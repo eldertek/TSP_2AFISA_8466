@@ -14,19 +14,19 @@
     </form>
     <h1 class="text-3xl font-bold text-black">Retrouve tes photos avec </h1><h1 class="text-3xl font-bold text-lime-500">INTêtes</h1>
     <p class="mt-2 text-slate-600">Dépose une photo de toi pour retrouver les moments où tu apparaîs !</p>
-    <form method="post" enctype="multipart/form-data" action="{% url 'accueil' %}">
+    <form method="post" enctype="multipart/form-data" action="{% url 'home' %}">
       {% csrf_token %}
       <input type="file" name="photo" required>
       <button type="submit" class="bg-lime-500 text-white px-4 py-2 rounded">Envoyer</button>
     </form>
-    {% if resultats %}
+    {% if results %}
     <div class="mt-4 p-4 grid-cols-3 grid gap-3 border rounded">
-      {% for resultat in resultats %}
+      {% for result in results %}
         <div class="p-4 border rounded">
-          <div>{{ resultat.photo }}</div>
-          <div>{{ resultat.evenement }}</div>
-          <div>{{ resultat.date }}</div>
-          <div>{{ resultat.score }}</div>
+          <div>{{ result.photo }}</div>
+          <div>{{ result.event }}</div>
+          <div>{{ result.date }}</div>
+          <div>{{ result.score }}</div>
 
         </div>
       {% endfor %}  

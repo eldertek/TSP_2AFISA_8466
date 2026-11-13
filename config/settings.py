@@ -40,7 +40,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "recherche",
+    "search",
     "indexing",
 ]
 
@@ -150,7 +150,7 @@ MAILERS = {
 }
 
 
-LOGIN_REDIRECT_URL = "accueil"
+LOGIN_REDIRECT_URL = "home"
 LOGOUT_REDIRECT_URL = "login"
 
 CSRF_TRUSTED_ORIGINS = ["http://localhost:8080", "http://127.0.0.1:8080"]
