@@ -1,13 +1,13 @@
 from django.test import TestCase
 
-from recherche.forms import CreationCompteAvecMail
+from search.forms import SchoolEmailUserCreationForm
 
 # Create your tests here.
 
 
 class InscriptionFormTest(TestCase):
     def test_academic_email_validation(self):
-        form = CreationCompteAvecMail(
+        form = SchoolEmailUserCreationForm(
             data={
                 "username": "test@telecom-sudparis.eu",
                 "password1": "MdpTest123!!",
@@ -17,7 +17,7 @@ class InscriptionFormTest(TestCase):
         self.assertTrue(form.is_valid())
 
     def test_non_academic_email_validation(self):
-        form = CreationCompteAvecMail(
+        form = SchoolEmailUserCreationForm(
             data={
                 "username": "test@gmail.com",
                 "password1": "MdpTest123!!",
