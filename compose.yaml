@@ -60,10 +60,10 @@ services:
       timeout: 5s
       retries: 5
 
-  worker_indexation:
+  worker_indexing:
     build: .
     entrypoint: []
-    command: celery -A config worker --loglevel=info -Q indexation
+    command: celery -A config worker --loglevel=info -Q indexing
     environment:
       DJANGO_ENV: production
       DJANGO_DEBUG: "False"
