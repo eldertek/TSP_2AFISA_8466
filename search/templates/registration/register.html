@@ -1,18 +1,22 @@
+{% load i18n %}
+{% get_current_language as LANGUAGE_CODE %}
+
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="{{ LANGUAGE_CODE }}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <title>Inscription</title>
+    <title>{% translate "Register" %}</title>
 </head>
 <body>
-    <h1>Créer un compte</h1>
+    
+    <h1>{% translate "Create an account" %}</h1>
     <form method="post">
         {% csrf_token %}
         {{ form.as_p}}
 
-        <button type="submit">S'inscrire</button>
+        <button type="submit">{% translate "Sign up" %}</button>
     </form>
 
     

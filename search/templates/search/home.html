@@ -1,5 +1,7 @@
+{% load i18n %}
+{% get_current_language as LANGUAGE_CODE %}
 <!doctype html>
-<html lang="fr">
+<html lang="{{ LANGUAGE_CODE}}">
 <head>
   <meta charset="utf-8">
   <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
@@ -7,17 +9,17 @@
 </head>
 <body class="bg-slate-50 text-slate-900">
   <main class="mx-auto max-w-6xl p-8">
-    <p>Connecté en tant que {{ user.username }}</p>
+    <p>{% blocktranslate with name=user.username %}Logged in as {{ name }}{% endblocktranslate %}</p>
     <form method="post" action="{% url 'logout' %}">
       {% csrf_token %}
-      <button type="submit" class="bg-lime-500 text-white px-4 py-2 rounded">Se déconnecter</button>
+      <button type="submit" class="bg-lime-500 text-white px-4 py-2 rounded">{% translate  "Sign out" %}</button>
     </form>
-    <h1 class="text-3xl font-bold text-black">Retrouve tes photos avec </h1><h1 class="text-3xl font-bold text-lime-500">INTêtes</h1>
-    <p class="mt-2 text-slate-600">Dépose une photo de toi pour retrouver les moments où tu apparaîs !</p>
+    <h1 class="text-3xl font-bold text-black">{% translate  "Retrieve your photos with" %}</h1><h1 class="text-3xl font-bold text-lime-500">INTêtes</h1>
+    <p class="mt-2 text-slate-600">{% translate  "Upload a photo of yourself to find moments where you appear!" %}</p>
     <form method="post" enctype="multipart/form-data" action="{% url 'home' %}">
       {% csrf_token %}
       <input type="file" name="photo" required>
-      <button type="submit" class="bg-lime-500 text-white px-4 py-2 rounded">Envoyer</button>
+      <button type="submit" class="bg-lime-500 text-white px-4 py-2 rounded">{% translate  "Upload" %}</button>
     </form>
     {% if results %}
     <div class="mt-4 p-4 grid-cols-3 grid gap-3 border rounded">
