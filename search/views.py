@@ -3,7 +3,7 @@ from django.shortcuts import redirect, render
 
 from indexing.models import Person
 from search.forms import SchoolEmailUserCreationForm
-from search.service import research
+from search.tasks import search_faces_task
 
 
 @login_required
@@ -11,7 +11,11 @@ def home(request):
     if request.method == "POST":
         photo = request.FILES.get("photo")
         if photo:
-            results = research(photo, user=request.user)
+            task = search_faces_task.apply_async(
+                args=[photo.read().hex(), request.user.id],
+                queue="search",
+            )
+            results = task.get(timeout=30)
             return render(request, "search/home.html", {"results": results})
     return render(request, "search/home.html")
 
