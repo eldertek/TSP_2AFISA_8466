@@ -24,13 +24,28 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 
+IS_PRODUCTION = os.environ.get("DJANGO_ENV") == "production"
+
 SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY", "django-insecure-dev")
+if IS_PRODUCTION and (not SECRET_KEY or SECRET_KEY.startswith("django-insecure")):
+    raise RuntimeError("DJANGO_SECRET_KEY must be set to a strong non-default secret in production.")
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get("DJANGO_DEBUG", "True") == "True"
+DEBUG = os.environ.get("DJANGO_DEBUG", "False" if IS_PRODUCTION else "True") == "True"
 
-ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", "localhost,127.0.0.1").split(",")
+ALLOWED_HOSTS = [
+    h.strip()
+    for h in os.environ.get("DJANGO_ALLOWED_HOSTS", "localhost,127.0.0.1").split(",")
+    if h.strip()
+]
+
+SECURE_CONTENT_TYPE_NOSNIFF = True
+X_FRAME_OPTIONS = "DENY"
+SECURE_REFERRER_POLICY = "strict-origin-when-cross-origin"
+SESSION_COOKIE_HTTPONLY = True
+SESSION_COOKIE_SECURE = not DEBUG
+CSRF_COOKIE_SECURE = not DEBUG
 
 
 # Application definition
@@ -81,13 +96,16 @@ WSGI_APPLICATION = "config.wsgi.application"
 # https://docs.djangoproject.com/en/6.1/ref/settings/#databases
 
 
-if os.environ.get("DJANGO_ENV") == "production":
+if IS_PRODUCTION:
+    _pg_password = os.environ.get("POSTGRES_PASSWORD", "")
+    if not _pg_password or _pg_password == "declic_password":
+        raise RuntimeError("POSTGRES_PASSWORD must be set to a non-default password in production.")
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.postgresql",
             "NAME": os.environ.get("POSTGRES_DB", "declic_db"),
             "USER": os.environ.get("POSTGRES_USER", "declic_user"),
-            "PASSWORD": os.environ.get("POSTGRES_PASSWORD", "declic_password"),
+            "PASSWORD": _pg_password,
             "HOST": os.environ.get("POSTGRES_HOST", "localhost"),
             "PORT": os.environ.get("POSTGRES_PORT", "5432"),
         }
