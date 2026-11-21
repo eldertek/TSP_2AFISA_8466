@@ -1,7 +1,12 @@
+import io
+import os
+import zipfile
+
 from django.contrib.auth.decorators import login_required
+from django.http import FileResponse
 from django.shortcuts import redirect, render
 
-from indexing.models import Person
+from indexing.models import Person, Photo
 from search.forms import SchoolEmailUserCreationForm
 from search.tasks import search_faces_task
 
@@ -36,3 +41,38 @@ def remove_from_index(request):
     if request.method == "POST":
         Person.objects.filter(user=request.user).delete()
     return redirect("home")
+
+
+@login_required
+def download_archive(request):
+    if request.method != "POST":
+        return redirect("home")
+
+    photo_ids = request.POST.getlist("photo_ids")
+    photos = (
+        Photo.objects.filter(id__in=photo_ids, faces__person__user=request.user).all()
+        if request.user.is_staff
+        else Photo.objects.filter(
+            id__in=photo_ids, faces__person__user=request.user
+        ).distinct()
+    )
+
+    if not photos.exists():
+        return redirect("home")
+
+    buffer = io.BytesIO()
+    with zipfile.ZipFile(buffer, "w", zipfile.ZIP_DEFLATED) as archive:
+        for photo in photos:
+            archive.write(
+                photo.image.path,
+                arcname=f"{photo.id}_{os.path.basename(photo.image.name)}",
+            )
+
+    buffer.seek(0)
+
+    return FileResponse(
+        buffer,
+        as_attachment=True,
+        filename="photos.zip",
+        content_type="application/zip",
+    )
