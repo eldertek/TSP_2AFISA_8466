@@ -1,22 +1,91 @@
 # INTêtes
 
-Retrouver les photos d'un album où l'on apparaît, en déposant une photo de soi. Projet du module PRO 8501 (projet informatique en Python, FISA 2A, Télécom SudParis).
+Application web permettant aux étudiants de retrouver les photos d'un album où ils apparaissent, en déposant une photo de leur visage. Projet du module **PRO 8501** (projet informatique en Python, FISA 2A, Télécom SudParis).
 
-Un cahier des charges plus complet est disponible dans `docs/Cahier des charges - INTêtes.pdf`.
+- Cahier des charges v2.1 : [`docs/Cahier des charges v2 - INTêtes.pdf`](docs/Cahier%20des%20charges%20v2%20-%20INTêtes.pdf)
+- Carnets de labo : [`docs/carnets-de-labo/`](docs/carnets-de-labo/)
 
-## Où en est le code
+---
 
-| Partie | Tâche du cahier des charges | État |
+## Lancement rapide (Docker)
+
+```bash
+git clone https://github.com/eldertek/TSP_2AFISA_8466.git
+cd TSP_2AFISA_8466
+./run.sh
+```
+
+*(Équivalent à `docker compose up -d --build`.)*
+
+Une fois les conteneurs démarrés (`healthy`), l'application est accessible sur :
+
+- **Site web** : http://localhost:8080
+- **Compte administrateur créé automatiquement au démarrage** :
+  - Identifiant : **`admin`**
+  - Mot de passe : **`projetinfo1A`**
+
+### Routes principales
+
+| URL | Accès | Rôle |
 |---|---|---|
-| Indexation : lecture des albums, détection des visages, empreintes | T3 | en cours, premier socle dans `intetes/indexation` |
-| Recherche par similarité | T4 | à venir |
-| Interface web, dépôt d'une photo, galerie | T5 | à venir |
-| Regroupement des visages en personnes | T6 | à venir |
-| Base de l'index et stockage des empreintes | T7 | à venir, l'index est pour l'instant un fichier JSON Lines |
+| `/` | Connecté | Dépôt d'une photo de soi et affichage des résultats par similarité |
+| `/indexing/` | Staff (`is_staff`) | Création/sélection d'un album et upload multi-photos vers Celery |
+| `/admin/` | Staff | Interface d'administration Django (`Album`, `Photo`, `Person`, `Face`, `User`) |
+| `/accounts/login/` | Public | Connexion |
+| `/register/` | Public | Inscription réservée aux adresses `@telecom-sudparis.eu` et `@imt-bs.eu` |
+| `/remove/` | Connecté (`POST`) | Retrait en un clic de ses empreintes biométriques de l'index (F7) |
 
-## Installation
+---
 
-Python 3.10 ou plus récent.
+## Architecture & Modèles de données
+
+La stack orchestrée par [`compose.yaml`](compose.yaml) repose sur **6 services Docker** :
+
+- **`nginx`** (`nginx:alpine`) : reverse proxy exposé sur le port `8080`, sert directement `/static/` et `/media/` via des volumes partagés.
+- **`web`** (Django + Gunicorn) : serveur applicatif web, applique les migrations, collecte les statiques et initialise le compte `admin` au démarrage via [`entrypoint.sh`](entrypoint.sh).
+- **`db`** (`postgres:17-alpine`) : base de données PostgreSQL avec healthcheck et volume persistant `postgres_data`.
+- **`redis`** (`redis:7-alpine`) : broker et backend de résultats Celery.
+- **`worker_indexing`** (Celery `-Q indexing`) : traite en arrière-plan la détection des visages (**YuNet**) et l'extraction des empreintes biométriques (**SFace**, 128 flottants `float32` stockés en 512 octets).
+- **`worker_search`** (Celery `-Q search`) : file prioritaire dédiée aux recherches par similarité cosinus (seuil OpenCV `0.363`), pour qu'une recherche ne soit pas bloquée par l'indexation d'un album.
+
+### Graphe des modèles
+
+![Graphe des modèles](docs/models.png)
+
+*(Généré avec `django-extensions` : `python manage.py graph_models indexing auth -g -o docs/models.dot` puis `dot -Tpng docs/models.dot -o docs/models.png`.)*
+
+---
+
+## Roadmap
+
+### Fait
+- **T3** : Détection des visages (OpenCV YuNet) et extraction d'empreintes (OpenCV SFace) dans `indexing/faces.py`.
+- **T4** : Moteur de recherche par similarité cosinus (`search/service.py`) avec `select_related` pour éviter les requêtes N+1.
+- **T7** : Modèles relationnels (`Album`, `Photo`, `Person`, `Face`), migrations dans Git et enregistrement dans l'admin Django.
+- **T8** : Inscription et connexion réservées aux adresses académiques (`@telecom-sudparis.eu`, `@imt-bs.eu`).
+- **T15** : Architecture asynchrone Redis + Celery avec deux files dédiées (`indexing` et `search`).
+- **F1** : Page `/indexing/` réservée au staff permettant de créer/choisir un album et d'uploader plusieurs photos d'un coup.
+- **T10 (backend)** : Rattachement des visages trouvés à `Person` et route `/remove/` supprimant les empreintes en cascade sans toucher aux photos.
+- **Docker & CI/CD** : `Dockerfile`, `compose.yaml` (PostgreSQL, Nginx, Gunicorn, healthchecks), `run.sh`, 9 tests automatisés et pipeline GitHub Actions (`.github/workflows/ci.yml`).
+
+### En cours
+- **T5** : Affichage des vraies images (`<img>`) et lien vers la photo d'origine dans la galerie, libellé « Sans album » et internationalisation (i18n).
+- **T10 (front)** : Ajout et stylisation du bouton de retrait dans `search/templates/search/home.html`.
+- **T12** : Intégration finale de bout en bout.
+
+### À faire / Optionnel
+- Pages d'erreur personnalisées `404` et `500`.
+- **T6** *(optionnel)* : Regroupement automatique des visages en personnes anonymes (F3).
+- **T11** *(optionnel)* : Notifications en temps réel lors de nouveaux albums (F8, Channels/WebSockets).
+- **F10** *(optionnel)* : Téléchargement de la sélection en une archive ZIP.
+- **T13 & T14** : Recette avec le client, vérifications finales sur clone neuf et slides de soutenance.
+- **T9** *(selon temps disponible)* : Déploiement sur le serveur MiNET et sauvegarde.
+
+---
+
+## Développement local, Tests & Qualité
+
+### Installation hors Docker
 
 ```bash
 python -m venv .venv
@@ -24,74 +93,24 @@ source .venv/bin/activate        # sous Windows : .venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
-Au premier lancement, les deux modèles (environ 39 Mo) sont téléchargés dans `~/.cache/intetes/modeles` (ou dans le dossier indiqué par la variable `INTETES_MODELES`), puis vérifiés par leur empreinte SHA-256.
-
-## Indexer un album
+### Lancer les tests
 
 ```bash
-python -m intetes.indexation chemin/vers/album --sortie index.jsonl
+python manage.py test
 ```
 
-Les sous-dossiers sont parcourus. Le fichier produit contient une ligne JSON par photo :
+Les tests (détection YuNet, empreintes SFace, contrôle d'accès 302/403/200 sur `/indexing/`, upload multi-photos avec mock Celery, validation des mails académiques, recherche par similarité et retrait en un clic) s'appuient sur les photos NASA du domaine public dans `tests/donnees/` (sources dans [`tests/donnees/SOURCES.md`](tests/donnees/SOURCES.md)).
 
-```json
-{"photo": "soiree/IMG_0042.jpg", "largeur": 6000, "hauteur": 4000,
- "visages": [{"boite": [1204, 855, 180, 231], "score": 0.94, "empreinte": [0.0123, ...]}]}
-```
+### Formatage et CI/CD
 
-- `boite` : position du visage en pixels de la photo d'origine (x, y, largeur, hauteur) ;
-- `empreinte` : 128 nombres qui caractérisent le visage, de norme 1 ;
-- une photo illisible donne une ligne avec un champ `erreur` au lieu de `visages`, sans arrêter l'album.
+Le code est formaté avec **black** et **isort** (configuration dans [`pyproject.toml`](pyproject.toml) et [`.pre-commit-config.yaml`](.pre-commit-config.yaml)). Le workflow GitHub Actions ([`.github/workflows/ci.yml`](.github/workflows/ci.yml)) exécute automatiquement à chaque push et pull request :
+- `isort --check` et `black --check` ;
+- `python manage.py check` et `python manage.py makemigrations --check --dry-run` ;
+- `python manage.py test` ;
+- `docker build`.
 
-Depuis Python :
+---
 
-```python
-from intetes.indexation import Analyseur, indexer_album, lire_photo, similarite, SEUIL_MEME_PERSONNE
+## Données personnelles (RGPD)
 
-analyseur = Analyseur()
-[moi] = analyseur.analyser(lire_photo("ma_photo.jpg"))
-for entree in indexer_album("album", analyseur):
-    for visage in entree.get("visages", []):
-        if similarite(moi.empreinte, visage["empreinte"]) >= SEUIL_MEME_PERSONNE:
-            print(entree["photo"])
-```
-
-## Choix techniques
-
-- **OpenCV 5** avec deux modèles libres du zoo OpenCV : **YuNet** pour détecter les visages (licence MIT) et **SFace** pour calculer les empreintes (licence Apache 2.0). Aucune dépendance difficile à installer (pas de dlib).
-- **Détection en deux passes** (photo ramenée à 2560 puis à 800 pixels sur son grand côté) : YuNet ne voit que les visages d'environ 10 à 300 pixels. Mesuré sur un portrait de 3300 x 4125 pixels, le visage de 525 pixels est raté en pleine taille et trouvé dès qu'on réduit la photo. Les doublons entre les deux passes sont fusionnés.
-- **Seuil de similarité à 0,363** (valeur donnée par OpenCV pour SFace sur le jeu LFW). Sur l'album de test, deux photos d'une même personne obtiennent entre 0,64 et 0,83, et deux personnes différentes jusqu'à 0,32 : la marge est mince, il faudra recalibrer le seuil sur de vraies photos de soirée (lumière faible, flou, contre-jour).
-- Les photos sont lues avec Pillow (orientation EXIF appliquée) et les modèles sont chargés depuis la mémoire : sous Windows, OpenCV n'ouvre pas un chemin qui contient des accents.
-
-## Données personnelles
-
-Une empreinte de visage est une donnée biométrique (article 9 du RGPD). Un index construit sur de vraies photos ne doit jamais être poussé sur le dépôt (les fichiers `index*.jsonl` sont ignorés par Git), et aucune mise en service n'est possible sans le consentement explicite prévu au cahier des charges.
-
-## Tests
-
-```bash
-pytest
-```
-
-L'album de test (`tests/donnees`) est fait de photos de la NASA de l'équipage d'Apollo 11, dans le domaine public (sources dans `tests/donnees/SOURCES.md`). Aucune photo d'étudiant n'est utilisée.
-
-## Formatage du code
-
-Le code est formaté avec **black** et les imports sont triés avec **isort** (réglé sur le profil black dans `pyproject.toml`, pour que les deux outils ne se contredisent pas). Les deux tournent automatiquement à chaque `git commit`, grâce à **pre-commit** (`.pre-commit-config.yaml`).
-
-À faire une fois, après avoir cloné le dépôt et activé l'environnement virtuel :
-
-```bash
-pip install pre-commit
-pre-commit install
-```
-
-Ensuite, si black ou isort modifie un fichier pendant un commit, le commit s'arrête : il suffit de relire les changements, de refaire `git add`, puis de relancer `git commit`.
-
-Pour formater tout le projet d'un coup :
-
-```bash
-pre-commit run --all-files
-```
-
-Pour mettre à jour les versions de black et d'isort : `pre-commit autoupdate`.
+Une empreinte faciale est une donnée biométrique sensible (article 9 du RGPD). Aucune photo d'étudiant réelle n'est versionnée dans ce dépôt (seules des photos du domaine public de la NASA sont utilisées pour les tests). Tout utilisateur peut supprimer ses empreintes biométriques de l'index en un clic via `/remove/` sans altérer les photos originales des albums.
