@@ -1,5 +1,7 @@
+import io
 import shutil
 import tempfile
+import zipfile
 
 import cv2
 from django.contrib.auth import get_user_model
@@ -73,6 +75,30 @@ class SearchAndRemovalTest(TestCase):
         self.assertEqual(Person.objects.filter(user=self.user).count(), 0)
         self.assertEqual(Face.objects.count(), 1)
         self.assertEqual(Photo.objects.count(), 2)
+
+    def test_download_archive_only_includes_user_photos(self):
+        with open("tests/donnees/recherche-armstrong.jpg", "rb") as query_photo:
+            results = research(query_photo, user=self.user)
+        self.client.force_login(self.user)
+        with override_settings(MEDIA_ROOT=self.temp_media):
+            all_photo_ids = list(Photo.objects.values_list("id", flat=True))
+
+            response = self.client.post(
+                reverse("download_archive"),
+                {"photo_ids": all_photo_ids},
+            )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response["Content-Type"], "application/zip")
+        self.assertEqual(
+            response["Content-Disposition"],
+            'attachment; filename="photos.zip"',
+        )
+
+        zip_bytes = b"".join(response.streaming_content)
+        with zipfile.ZipFile(io.BytesIO(zip_bytes)) as archive:
+            self.assertEqual(len(archive.namelist()), 1)
+            self.assertIn("armstrong", archive.namelist()[0])
 
     def tearDown(self):
         shutil.rmtree(self.temp_media, ignore_errors=True)

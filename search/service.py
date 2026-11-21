@@ -50,6 +50,7 @@ def research(photo, user=None):
                     face.save(update_fields=["person"])
                 results.append(
                     {
+                        "photo_id": face.photo_id,
                         "photo": face.photo.image.url,
                         "event": (
                             face.photo.album.name if face.photo.album else "no-album"
