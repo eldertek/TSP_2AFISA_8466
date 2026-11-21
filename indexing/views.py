@@ -1,5 +1,5 @@
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponseForbidden
+from django.core.exceptions import PermissionDenied
 from django.shortcuts import render
 from django.utils import timezone
 from django.utils.dateparse import parse_datetime
@@ -11,7 +11,7 @@ from indexing.tasks import index_photo
 @login_required
 def index(request):
     if not request.user.is_staff:
-        return HttpResponseForbidden("You do not have permission to access this page.")
+        raise PermissionDenied("You do not have permission to access this page.")
 
     albums = Album.objects.order_by("-event_date")
 

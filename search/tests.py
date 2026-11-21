@@ -4,9 +4,10 @@ import tempfile
 import cv2
 from django.contrib.auth import get_user_model
 from django.core.files.uploadedfile import SimpleUploadedFile
-from django.test import TestCase, override_settings
+from django.test import RequestFactory, TestCase, override_settings
 from django.urls import reverse
 from django.utils import timezone
+from django.views.defaults import server_error
 
 from indexing.faces import detect_faces, extract_embedding
 from indexing.models import Album, Face, Person, Photo
@@ -97,3 +98,31 @@ class InscriptionFormTest(TestCase):
             }
         )
         self.assertFalse(form.is_valid())
+
+
+class ErrorPagesTest(TestCase):
+    @override_settings(DEBUG=False, ALLOWED_HOSTS=["testserver"])
+    def test_403_uses_custom_template(self):
+        self.client.force_login(
+            get_user_model().objects.create_user(
+                username="user", password="Password123!", is_staff=False
+            )
+        )
+        response = self.client.get(reverse("indexing:index"))
+        self.assertEqual(response.status_code, 403)
+        self.assertTemplateUsed(response, "403.html")
+
+    @override_settings(DEBUG=False, ALLOWED_HOSTS=["testserver"])
+    def test_404_uses_custom_template(self):
+        response = self.client.get("/nonexistent-page/")
+        self.assertEqual(response.status_code, 404)
+        self.assertTemplateUsed(response, "404.html")
+
+    @override_settings(DEBUG=False, ALLOWED_HOSTS=["testserver"])
+    def test_500_uses_custom_template(self):
+        request = RequestFactory().get("/")
+        response = server_error(request)
+        self.assertEqual(response.status_code, 500)
+        self.assertContains(
+            response, b"An internal server error occurred.", status_code=500
+        )
