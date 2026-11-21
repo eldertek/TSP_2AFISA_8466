@@ -34,6 +34,11 @@
       {% endfor %}  
       </div>
     {% endif %}
+
+    <form method="post" action="{% url 'remove_from_index' %}" onsubmit="return confirm('{% translate "Are you sure? Your face data will be permanently deleted." %}');">
+      {% csrf_token %}
+      <button type="submit" class="bg-red-600 text-white px-4 py-2 rounded">{% translate  "Remove my face data" %}</button>
+    </form>
   </main>
 </body>
 </html>
