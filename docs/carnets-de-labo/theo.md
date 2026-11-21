@@ -39,3 +39,8 @@ J'ai ensuite configuré Celery avec Redis comme broker dans Django et ajouté tr
 J'ai complété la page d'indexation (F1) pour permettre de sélectionner un album existant ou d'en créer un nouveau avec sa date d'événement, puis d'envoyer plusieurs photos d'un coup vers la file Celery indexing. J'ai également restreint l'accès à cette page aux membres du staff (erreur 403 pour les comptes étudiants classiques).
 
 J'ai ensuite écrit les tests unitaires dans indexing/tests.py et search/tests.py afin de vérifier la détection YuNet, l'extraction SFace, le contrôle d'accès sur /indexing/, l'upload multi-photos, la recherche par similarité et le retrait de l'index en un clic (9 tests au total avec ceux d'Amandine). Enfin, j'ai ajouté un workflow GitHub Actions (.github/workflows/ci.yml) qui vérifie automatiquement le formatage black/isort, les migrations, les tests unitaires et le build de l'image Docker à chaque push.
+
+## 21 / 11 / 2026
+J'ai généré le graphe des modèles de la base de données (docs/models.png) avec django-extensions et Graphviz afin de documenter l'architecture des tables et leurs relations vers User. J'ai également mis à jour le README pour refléter le projet actuel (lancement Docker via run.sh, identifiants admin, architecture des 6 services, roadmap et tests).
+
+J'ai ensuite mis en place les pages d'erreur personnalisées (templates/403.html, 404.html et 500.html) en déclarant le dossier templates à la racine dans settings.py et en passant l'accès refusé de /indexing/ sur PermissionDenied. J'ai complété les tests dans search/tests.py pour vérifier les trois codes d'erreur (12 tests qui passent au total) et demandé à Amandine sur l'issue #3 d'habiller le design de ces pages.

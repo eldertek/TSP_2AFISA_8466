@@ -3,6 +3,7 @@ numpy>=2.0
 pillow>=11.0
 pytest>=8.0
 django>=6.1
-gunicorn
-psycopg[binary]
-celery[redis]
+gunicorn>=27.0
+psycopg[binary]>=3.0
+celery[redis]>=5.7
+django-extensions>=4.1
