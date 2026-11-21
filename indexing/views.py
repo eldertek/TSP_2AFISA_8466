@@ -1,24 +1,71 @@
 from django.contrib.auth.decorators import login_required
+from django.http import HttpResponseForbidden
 from django.shortcuts import render
+from django.utils import timezone
+from django.utils.dateparse import parse_datetime
 
-from indexing.faces import detect_faces
-from indexing.models import Photo
+from indexing.models import Album, Photo
 from indexing.tasks import index_photo
 
 
 @login_required
 def index(request):
+    if not request.user.is_staff:
+        return HttpResponseForbidden("You do not have permission to access this page.")
+
+    albums = Album.objects.order_by("-event_date")
+
     if request.method == "POST":
-        uploaded_file = request.FILES.get("photo")
-        uploaded_file.seek(0)
+        album_id = request.POST.get("album_id")
+        album_name = request.POST.get("album_name", "").strip()
+        event_date_str = request.POST.get("event_date")
 
-        photo_obj = Photo.objects.create(image=uploaded_file, uploaded_by=request.user)
+        album = None
 
-        index_photo.apply_async(args=[photo_obj.id], queue="indexing")
+        if album_name and event_date_str:
+            try:
+                event_date = parse_datetime(event_date_str)
+                if event_date is None:
+                    raise ValueError("Invalid date format.")
+                if timezone.is_naive(event_date):
+                    event_date = timezone.make_aware(
+                        event_date, timezone.get_current_timezone()
+                    )
+                album, created = Album.objects.get_or_create(
+                    name=album_name, event_date=event_date
+                )
+            except ValueError as e:
+                return render(
+                    request,
+                    "indexing/index.html",
+                    {"albums": albums, "error": str(e)},
+                )
+        elif album_id:
+            try:
+                album = Album.objects.get(id=album_id)
+            except Album.DoesNotExist:
+                return render(
+                    request,
+                    "indexing/index.html",
+                    {"albums": albums, "error": "Selected album does not exist."},
+                )
+
+        uploaded_files = request.FILES.getlist("photos")
+
+        for uploaded_file in uploaded_files:
+            photo_obj = Photo.objects.create(
+                image=uploaded_file, album=album, uploaded_by=request.user
+            )
+            index_photo.apply_async(args=[photo_obj.id], queue="indexing")
+
+        albums = Album.objects.order_by("-event_date")
 
         return render(
             request,
             "indexing/index.html",
-            {"message": "Photo uploaded and indexing started."},
+            {
+                "message": f"{len(uploaded_files)} photos uploaded and queued for indexing.",
+                "albums": albums,
+            },
         )
-    return render(request, "indexing/index.html")
+    return render(request, "indexing/index.html", {"albums": albums})

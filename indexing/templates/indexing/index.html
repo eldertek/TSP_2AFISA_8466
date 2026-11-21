@@ -10,18 +10,33 @@
     <p>Welcome to the Indexing page!</p>
     
     <h2>Indexing Form</h2>
+    {% if error %}
+        <p style="color: red;">{{ error }}</p>
+    {% endif %}
+    {% if message %}
+        <p>{{ message }}</p>
+    {% endif %}
 
-    {% if request.method == 'POST' %}
-        <p>We have detected {{ detected_faces|length }} faces. They are located at: {{ detected_faces }}</p>
-    {% else %}
     <form method="post" enctype="multipart/form-data" action="{% url 'indexing:index' %}">
         {% csrf_token %}
-        <label for="photo">Please upload a photo:</label>
-        <input type="file" id="photo" name="photo" required>
+        <label for="album_id">Album:</label>
+        <select id="album_id" name="album_id">
+            <option value="">-- No album --</option>
+            {% for album in albums %}
+                <option value="{{ album.id }}">{{ album.name }} ({{ album.event_date|date:"Y-m-d" }})</option>
+            {% endfor %}
+        </select>
+
+        <label for="album_name">New album name:</label>
+        <input type="text" id="album_name" name="album_name">
+
+        <label for="event_date">Event date:</label>
+        <input type="datetime-local" id="event_date" name="event_date">
+
+        <label for="photos">Please upload photos:</label>
+        <input type="file" id="photos" name="photos" accept="image/*" multiple required>
         <button type="submit">Index</button>
     </form>
-
-    {% endif %}
 
 </body>
 </html>

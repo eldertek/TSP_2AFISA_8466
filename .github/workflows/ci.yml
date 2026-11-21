@@ -1,0 +1,47 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Install system dependencies
+        run: sudo apt-get update && sudo apt-get install -y libglib2.0-0
+
+      - name: Install Python dependencies
+        run: pip install -r requirements.txt black==26.10.1 isort==9.0.2
+
+      - name: Check formatting (isort and black)
+        run: |
+          isort --check config indexing search
+          black --check config indexing search
+
+      - name: Run Django checks and migrations check
+        run: |
+          python manage.py check
+          python manage.py makemigrations --check --dry-run
+
+      - name: Run unit tests
+        run: python manage.py test
+
+  docker:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Build Docker image
+        run: docker build -t intetes-web:ci .
