@@ -25,15 +25,19 @@
     <div class="mt-4 p-4 grid-cols-3 grid gap-3 border rounded">
       {% for result in results %}
         <div class="p-4 border rounded">
-          <div>{{ result.photo }}</div>
-          <div>{{ result.event }}</div>
-          <div>{{ result.date }}</div>
-          <div>{{ result.score }}</div>
+          <a href="{{ result.photo }}" target="_blank">
+            <img src="{{ result.photo }}" alt="{% translate 'Photo' %}" class="w-full h-auto">
+          </a>
+          <div>{% translate "Event" %}: {% if result.event == "no-album" %}{% translate "No album" %}{% else %} {{ result.event }}{% endif %} </div>
+          <div>{% translate "Date" %}: {{ result.date }}</div>
+          <div>{% translate "Score" %}: {{ result.score }}</div>
 
         </div>
       {% endfor %}  
       </div>
-    {% endif %}
+      {% elif request.method == "POST" %}
+        <p>{% translate "No results found." %}</p>
+      {% endif %}
 
     <form method="post" action="{% url 'remove_from_index' %}" onsubmit="return confirm('{% translate "Are you sure? Your face data will be permanently deleted." %}');">
       {% csrf_token %}
