@@ -22,6 +22,9 @@
       <button type="submit" class="bg-lime-500 text-white px-4 py-2 rounded">{% translate  "Upload" %}</button>
     </form>
     {% if results %}
+    <form method="post" action="{% url 'download_archive' %}">
+      {% csrf_token %}
+    
     <div class="mt-4 p-4 grid-cols-3 grid gap-3 border rounded">
       {% for result in results %}
         <div class="p-4 border rounded">
@@ -31,10 +34,14 @@
           <div>{% translate "Event" %}: {% if result.event == "no-album" %}{% translate "No album" %}{% else %} {{ result.event }}{% endif %} </div>
           <div>{% translate "Date" %}: {{ result.date }}</div>
           <div>{% translate "Score" %}: {{ result.score }}</div>
-
+          <label>{% translate "Select" %}
+          <input type="checkbox" name="photo_ids" value="{{ result.photo_id }}">
+          </label>
         </div>
       {% endfor %}  
       </div>
+      <button type="submit" class="mt-4 bg-lime-500 text-white px-4 py-2 rounded">{% translate "Download selection" %}</button>
+      </form> 
       {% elif request.method == "POST" %}
         <p>{% translate "No results found." %}</p>
       {% endif %}
