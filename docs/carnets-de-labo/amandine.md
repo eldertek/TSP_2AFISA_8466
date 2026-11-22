@@ -73,3 +73,68 @@ Problèmes rencontrés et les solutions que j'ai trouvé :
 Reste à faire : 
     - faire en sorte qu'on puisse se connecter uniquement avec l'adresse mail de l'école
 
+[12/11/26]
+Objectif du jour : finir T8, l'inscription doit être réservée aux adresses de l'école.
+
+Ce que j'ai fait : 
+    - création du formulaire SchoolEmailUserCreationForm qui hérite de UserCreationForm de Django
+    - la méthode clean_username refuse toute adresse qui ne finit pas par @telecom-sudparis.eu ou @imt-bs.eu
+    - création de la vue register et de la page d'inscription registration/register.html
+    - ajout d'un lien "Créer un compte" sur la page de connexion
+
+Problèmes rencontrés et les solutions que j'ai trouvé : 
+    - j'ai d'abord voulu récupérer la valeur avec cleaned_data, mais dans une méthode clean_<champ> il faut appeler super().clean_username() pour garder les vérifications de Django 
+    - ma condition était fausse avec "not A or not B" : une adresse valide pour une école était refusée par l'autre condition, il fallait un "and"
+    - pour tester le formulaire sans passer par le navigateur, j'ai utilisé python manage.py shell avec Form(data={...}) puis is_valid() et errors
+
+[13/11/26]
+Objectif du jour : finir la connexion/déconnexion et tester l'inscription. 
+
+Ce que j'ai fait :
+    - LOGIN_REDIRECT_URL vers l'accueil et LOGOUT_REDIRECT_URL vers la page de connexion
+    - bouton de déconnexion en formulaire POST avec csrf_token (la déconnexion en GET ne marche plus avec les versions récentes de Django)
+    - 2 tests unitaires sur la validation de l'adresse : une adresse de l'école est acceptée, une adresse gmail est refusée
+    - après le renommage de l'app recherche en search par Théo, correction de l'import dans les tests et de la balise url du bouton de déconnexion
+    - installation de Docker Desktop pour lancer le projet en local
+
+Problèmes rencontrés et les solutions que j'ai trouvé : 
+    - conflit de merge sur config/settings.py après un git pull : j'ai gardé la config PostgreSQL de Théo et mes réglages de redirection
+    - push refusé (fetch first) parce que Théo avait poussé entre : git pull puis push
+    - "Ran 0 tests" : les méthodes de test doivent commencer par test_ sinon Django ne les trouve pas
+    - le conteneur web plantait au démarrage (exit 255) : sous Windows, git convertissait entrypoint/sh en fins de ligne CRLF que Linux ne sait pas lire. J'ai ajouté un .gitattributes avec *.sh text eol=lf
+
+[14/11/26]
+Objectif du jour : commencer l'internationalisation (i18n) du site textes en anglais traduits en français. 
+
+Ce que j'ai fait : 
+    - installation de gettext (nécessaire pour générer les fichiers de traduction)
+    - dans settinfs.py : LANGUAGES (français et anglais),
+    LOCALE_PATHS vers le dossier locale/ et LocaleMiddleware entre SessionMiddleware et CommonMiddleware
+    - textes des templates register.html, home.html et login.html réécrits en anglais avec {% translate %}, et {% blocktranslate %} pour les phrases qui contiennent une variable ("Logged in as ...")
+    - attribut lang de la page qui suit la langue active avec get_current_language
+    - mise à jour des issues #3, #6 et #12, fermeture de #6 (T8 terminée)
+
+Problèmes rencontrés et les solutions que j'ai trouvé :
+    - ImproperlyConfigured sur LOCALE_PATHS : il faut une liste [BASE_DIR / "locale"] et pas un seul chemin 
+    - {% translate %} n'accepte pas de variable dans le texte, il faut {% blocktranslate with ... %}
+
+[21/11/26]
+Objectif du jour : bouton de retrait de l'index (demande de Théo dans #8) et fin de la galerie T5. 
+
+Ce que j'ai fait : 
+    - textes de forms.py passés en anglais avec gettext_lazy, formatage avec black et isort pour passer la CI de Théo 
+    - bouton "Remove my face data" en rouge dans home.html, en POST vers remove_from_index, avec une confirmation avant l'envoi (onsubmit="return confirm(...)")
+    - galerie : affichage de l'image avec un lien vers la photo d'origine (F5), "No album" pour les photos sans album, et un message "No results found." quand la recherche ne trouve rien
+    - test complet sous Docker : indexation d'un album en admin, recherche, puis retrait. La Person et ses Face sont supprimées, les photos restent dans l'album
+
+Problèmes rencontrés et les solutions que j'ai trouvé : 
+    - erreur 403 en cliquant sur le bouton de retrait : je m'étais connectée en admin dans le même navigateur, ce qui change le jeton CSRF. Il faut recharger la page après un changement de compte
+    - "rien ne se passe" quand je cherche avec une photo : aucun visage n'était détecté sur les grandes images. En testant, une photo de 2687 px donne 0 visage et la même réduite à 1680 px en donne 1. J'ai signalé le bug à Théo dans #12
+    - le message "aucun résultat" s'affichait dès l'ouverture de la page : je l'ai conditionné à request.method == "POST"
+
+Reste à faire : 
+    - F10 : cases à cocher et vouton de téléchargement ZIP dans la galerie (demande de Théo dans #11)
+    - design des pages 403, 404 et 500 (demande de Théo dans #3)
+    - fin de l'i18n : makemessages, traduction de .po, compilemessages, sélecteur de langue 
+
+    
