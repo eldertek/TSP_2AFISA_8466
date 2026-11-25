@@ -133,8 +133,23 @@ Problèmes rencontrés et les solutions que j'ai trouvé :
     - le message "aucun résultat" s'affichait dès l'ouverture de la page : je l'ai conditionné à request.method == "POST"
 
 Reste à faire : 
-    - F10 : cases à cocher et vouton de téléchargement ZIP dans la galerie (demande de Théo dans #11)
+    - F10 : cases à cocher et bouton de téléchargement ZIP dans la galerie (demande de Théo dans #11)
     - design des pages 403, 404 et 500 (demande de Théo dans #3)
     - fin de l'i18n : makemessages, traduction de .po, compilemessages, sélecteur de langue 
 
-    
+
+[22/11/26]
+Objectif du jour : mettre à jour le carnet et les issues, puis brancher le téléchargement ZIP (F10) dans la galerie (demande de Théo dans #11).
+
+Ce que j'ai fait :
+    - commentaires sur les issues #8 (bouton de retrait), #3 (galerie) et #12 (bug de détection sur les grandes images)
+    - dans home.html, un formulaire POST vers download_archive autour de la grille de résultats, avec une case à cocher photo_ids sur chaque carte et un bouton "Download selection"
+    - test sous Docker : recherche, sélection d'une photo puis téléchargement, l'archive photos.zip est bien reçue
+
+Problèmes rencontrés et les solutions que j'ai trouvé : 
+    - le texte "Select" ne s'affichait pas : je l'avais mis dans la balise <label> elle-même au lieu de le mettre entre <label> et </label>
+    - le formulaire de retrait doit rester en dehors du formulaire de téléchargement, car on ne peut pas imbriquer deux formulaires en HTML
+
+Reste à faire : 
+    - design des pages 403, 404 et 500 (demande de Théo dans #3)
+    - fin de l'i18n : makemessages, traduction du .po, compilemessages, sélecteur de langue
