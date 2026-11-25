@@ -67,7 +67,7 @@ services:
     environment:
       DJANGO_ENV: production
       DJANGO_DEBUG: "False"
-      DJANGO_ALLOWED_HOSTS: localhost,
+      DJANGO_ALLOWED_HOSTS: localhost, 127.0.0.1
       POSTGRES_DB: declic_db
       POSTGRES_USER: declic_user
       POSTGRES_PASSWORD: declic_password
@@ -90,7 +90,7 @@ services:
     environment:
       DJANGO_ENV: production
       DJANGO_DEBUG: "False"
-      DJANGO_ALLOWED_HOSTS: localhost,
+      DJANGO_ALLOWED_HOSTS: localhost, 127.0.0.1
       POSTGRES_DB: declic_db
       POSTGRES_USER: declic_user
       POSTGRES_PASSWORD: declic_password
