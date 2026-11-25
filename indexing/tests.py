@@ -26,6 +26,17 @@ class FaceRecognitionTest(TestCase):
 
         self.assertEqual(len(embedding), 512, "Expected embedding length to be 512.")
 
+    def test_detect_faces_on_large_image(self):
+        image = cv2.imread("tests/donnees/album/armstrong-portrait.jpg")
+        assert image is not None
+        height, width = image.shape[:2]
+        large_image = cv2.resize(image, (3000, int(height * 3000 / width)))
+
+        faces = detect_faces(large_image)
+
+        self.assertEqual(len(faces), 1)
+        self.assertEqual(len(extract_embedding(large_image, faces[0])), 512)
+
 
 class IndexingViewTest(TestCase):
     def setUp(self):

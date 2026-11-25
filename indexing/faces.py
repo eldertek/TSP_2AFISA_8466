@@ -4,6 +4,30 @@ import numpy as np
 from indexing.models import Face, Person
 
 SIMILARITY_THRESHOLD = 0.363
+MAX_IMAGE_DIMENSION = 1600
+
+
+def resize_image_if_needed(image):
+    """
+    Resize the image if its dimensions exceed the maximum allowed size.
+
+    @param image: The input image to be resized.
+    """
+    height, width = image.shape[:2]
+    interpolation = (
+        cv2.INTER_AREA if max(height, width) > MAX_IMAGE_DIMENSION else cv2.INTER_LINEAR
+    )
+
+    if max(height, width) > MAX_IMAGE_DIMENSION:
+        scaling_factor = MAX_IMAGE_DIMENSION / max(height, width)
+        new_width = int(width * scaling_factor)
+        new_height = int(height * scaling_factor)
+        resized_image = cv2.resize(
+            image, (new_width, new_height), interpolation=interpolation
+        )
+        return (resized_image, scaling_factor)
+
+    return (image, 1.0)
 
 
 def detect_faces(image):
@@ -12,16 +36,24 @@ def detect_faces(image):
 
     @param image: The input image in which to detect faces.
     """
+    resized_image, scale = resize_image_if_needed(image)
+
     # Load the pre-trained face detection model with the specified input size
-    height, width = image.shape[:2]
+    height, width = resized_image.shape[:2]
     detector = cv2.FaceDetectorYN.create(
         "models/face_detection_yunet_2026may.onnx", "", (width, height)
     )
 
     # Detect faces in the image
-    _, faces = detector.detect(image)
+    _, faces = detector.detect(resized_image)
 
-    return [] if faces is None else faces
+    if faces is None:
+        return []
+
+    if scale != 1.0:
+        faces[:, :14] /= scale
+
+    return faces
 
 
 def extract_embedding(image, face):
