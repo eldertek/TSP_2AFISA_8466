@@ -7,3 +7,5 @@ gunicorn>=27.0
 psycopg[binary]>=3.0
 celery[redis]>=5.7
 django-extensions>=4.1
+channels[daphne]>=4.0
+channels-redis>=4.0
