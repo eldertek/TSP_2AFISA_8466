@@ -46,3 +46,8 @@ J'ai généré le graphe des modèles de la base de données (docs/models.png) a
 J'ai ensuite mis en place les pages d'erreur personnalisées (templates/403.html, 404.html et 500.html) en déclarant le dossier templates à la racine dans settings.py et en passant l'accès refusé de /indexing/ sur PermissionDenied. J'ai complété les tests dans search/tests.py pour vérifier les trois codes d'erreur (12 tests qui passent au total) et demandé à Amandine sur l'issue #3 d'habiller le design de ces pages.
 
 J'ai aussi développé la fonctionnalité de téléchargement en archive ZIP (F10) dans search/views.py à l'aide de zipfile et io.BytesIO. Chaque résultat de recherche expose désormais son photo_id et la vue download_archive vérifie que l'étudiant ne peut télécharger que les photos où son visage est associé à son compte (avec .distinct() pour éviter les doublons), puis j'ai ajouté un test unitaire qui ouvre le ZIP généré pour vérifier son contenu et le contrôle d'accès (13 tests qui passent).
+
+## 25 / 11 / 2026
+J'ai poussé le regroupement automatique des visages en personnes anonymes (T6 / F3) et fermé les issues terminées (#4, #8 et #11).
+
+Suite au retour d'Amandine sur l'issue #12 (YuNet ne détectait aucun visage sur les grandes photos de smartphone au-dessus de 1600 px), j'ai ajouté une fonction resize_image_if_needed dans indexing/faces.py qui réduit les images dépassant 1600 px avant la détection YuNet, puis remet les coordonnées des boîtes et des points clés à l'échelle d'origine. Cela corrige automatiquement l'indexation et la recherche sans modifier le reste du code, et un nouveau test unitaire vérifie la détection sur une image de 3000 px (15 tests au total).

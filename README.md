@@ -59,25 +59,24 @@ La stack orchestrée par [`compose.yaml`](compose.yaml) repose sur **6 services 
 ## Roadmap
 
 ### Fait
-- **T3** : Détection des visages (OpenCV YuNet) et extraction d'empreintes (OpenCV SFace) dans `indexing/faces.py`.
+- **T3** : Détection des visages (OpenCV YuNet avec redimensionnement automatique au-dessus de 1600 px) et extraction d'empreintes (OpenCV SFace) dans `indexing/faces.py`.
 - **T4** : Moteur de recherche par similarité cosinus (`search/service.py`) avec `select_related` pour éviter les requêtes N+1.
+- **T6** : Regroupement automatique des visages en personnes anonymes (F3, `assign_person` dans `indexing/faces.py`).
 - **T7** : Modèles relationnels (`Album`, `Photo`, `Person`, `Face`), migrations dans Git et enregistrement dans l'admin Django.
 - **T8** : Inscription et connexion réservées aux adresses académiques (`@telecom-sudparis.eu`, `@imt-bs.eu`).
+- **T10** : Retrait de l'index en un clic (`/remove/`, backend + bouton avec confirmation) et gestion des albums/visages via `/admin/`.
+- **F10** : Sélection de photos dans la galerie et téléchargement en une seule archive ZIP (`/download/`) avec contrôle d'accès.
 - **T15** : Architecture asynchrone Redis + Celery avec deux files dédiées (`indexing` et `search`).
 - **F1** : Page `/indexing/` réservée au staff permettant de créer/choisir un album et d'uploader plusieurs photos d'un coup.
-- **T10 (backend)** : Rattachement des visages trouvés à `Person` et route `/remove/` supprimant les empreintes en cascade sans toucher aux photos.
-- **Docker & CI/CD** : `Dockerfile`, `compose.yaml` (PostgreSQL, Nginx, Gunicorn, healthchecks), `run.sh`, 9 tests automatisés et pipeline GitHub Actions (`.github/workflows/ci.yml`).
+- **Pages d'erreur** : templates personnalisés `403.html`, `404.html` et `500.html` (testés).
+- **Docker & CI/CD** : `Dockerfile`, `compose.yaml` (PostgreSQL, Nginx, Gunicorn, healthchecks), `run.sh`, 15 tests automatisés et pipeline GitHub Actions (`.github/workflows/ci.yml`).
 
 ### En cours
-- **T5** : Affichage des vraies images (`<img>`) et lien vers la photo d'origine dans la galerie, libellé « Sans album » et internationalisation (i18n).
-- **T10 (front)** : Ajout et stylisation du bouton de retrait dans `search/templates/search/home.html`.
+- **T5** : Design final de l'interface, habillage des pages d'erreur `403`/`404`/`500` et finalisation de l'i18n.
 - **T12** : Intégration finale de bout en bout.
 
 ### À faire / Optionnel
-- Pages d'erreur personnalisées `404` et `500`.
-- **T6** *(optionnel)* : Regroupement automatique des visages en personnes anonymes (F3).
 - **T11** *(optionnel)* : Notifications en temps réel lors de nouveaux albums (F8, Channels/WebSockets).
-- **F10** *(optionnel)* : Téléchargement de la sélection en une archive ZIP.
 - **T13 & T14** : Recette avec le client, vérifications finales sur clone neuf et slides de soutenance.
 - **T9** *(selon temps disponible)* : Déploiement sur le serveur MiNET et sauvegarde.
 
