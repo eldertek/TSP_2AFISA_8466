@@ -7,9 +7,11 @@ from django.contrib.auth import get_user_model
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import TestCase, override_settings
 from django.urls import reverse
+from django.utils import timezone
 
 from indexing.faces import detect_faces, extract_embedding
-from indexing.models import Album, Photo
+from indexing.models import Album, Face, Person, Photo
+from indexing.tasks import index_photo
 
 
 class FaceRecognitionTest(TestCase):
@@ -90,3 +92,45 @@ class IndexingViewTest(TestCase):
         self.assertEqual(Album.objects.count(), 1)
         self.assertEqual(Photo.objects.filter(album__name="Apollo 11").count(), 2)
         self.assertEqual(mock_task.call_count, 2)
+
+
+class PersonClusteringTest(TestCase):
+    def setUp(self):
+        self.temp_media = tempfile.mkdtemp()
+        self.admin = get_user_model().objects.create_user(
+            username="admin_test",
+            password="Password123!",
+            is_staff=True,
+        )
+
+    def test_assign_person_groups_same_person_anonymously(self):
+
+        with override_settings(MEDIA_ROOT=self.temp_media):
+            album = Album.objects.create(name="Apollo 11", event_date=timezone.now())
+
+            for path in (
+                "tests/donnees/album/aldrin-portrait.jpg",
+                "tests/donnees/album/armstrong-portrait.jpg",
+                "tests/donnees/album/equipage-apollo-11.jpg",
+            ):
+                with open(path, "rb") as image_file:
+                    uploaded = SimpleUploadedFile(
+                        path.rsplit("/", 1)[-1],
+                        image_file.read(),
+                        content_type="image/jpeg",
+                    )
+
+                photo_obj = Photo.objects.create(
+                    image=uploaded, album=album, uploaded_by=self.admin
+                )
+                image = cv2.imread(path)
+
+                for face in detect_faces(image):
+                    Face.objects.create(
+                        photo=photo_obj,
+                        embedding=extract_embedding(image, face),
+                        box_x=int(face[0]),
+                        box_y=int(face[1]),
+                        box_w=int(face[2]),
+                        box_h=int(face[3]),
+                    )

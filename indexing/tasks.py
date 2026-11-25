@@ -1,8 +1,8 @@
 import cv2
 from celery import shared_task
 
+from indexing.faces import assign_person, detect_faces, extract_embedding
 from indexing.models import Face, Photo
-from search.service import detect_faces, extract_embedding
 
 
 @shared_task
@@ -13,7 +13,10 @@ def index_photo(photo_id):
 
     for face in detected_faces:
         embedding = extract_embedding(image, face)
+        person = assign_person(embedding)
+
         Face.objects.create(
+            person=person,
             photo=photo_obj,
             embedding=embedding,
             box_x=int(face[0]),
