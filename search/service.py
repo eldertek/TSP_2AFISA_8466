@@ -1,7 +1,12 @@
 import cv2
 import numpy as np
 
-from indexing.faces import detect_faces, extract_embedding
+from indexing.faces import (
+    SIMILARITY_THRESHOLD,
+    detect_faces,
+    extract_embedding,
+    get_face_recognizer,
+)
 from indexing.models import Face, Person
 
 
@@ -27,9 +32,7 @@ def research(photo, user=None):
         query_embedding = np.frombuffer(query_bytes, dtype=np.float32).reshape(1, -1)
         faces = Face.objects.select_related("photo", "photo__album").all()
 
-        recognizer = cv2.FaceRecognizerSF.create(
-            "models/face_recognition_sface_2021dec.onnx", ""
-        )
+        recognizer = get_face_recognizer()
 
         person = None
         if user and user.is_authenticated:
@@ -44,7 +47,7 @@ def research(photo, user=None):
             score = recognizer.match(
                 query_embedding, db_embedding, cv2.FaceRecognizerSF_FR_COSINE
             )
-            if score >= 0.363:
+            if score >= SIMILARITY_THRESHOLD:
                 if person and face.person_id != person.id:
                     face.person = person
                     face.save(update_fields=["person"])

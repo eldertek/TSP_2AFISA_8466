@@ -1,3 +1,5 @@
+from functools import lru_cache
+
 import cv2
 import numpy as np
 
@@ -5,6 +7,11 @@ from indexing.models import Face, Person
 
 SIMILARITY_THRESHOLD = 0.363
 MAX_IMAGE_DIMENSION = 1600
+
+
+@lru_cache(maxsize=1)
+def get_face_recognizer():
+    return cv2.FaceRecognizerSF.create("models/face_recognition_sface_2021dec.onnx", "")
 
 
 def resize_image_if_needed(image):
@@ -64,9 +71,7 @@ def extract_embedding(image, face):
     @param face: The bounding box of the detected face.
     """
     # Load the pre-trained face recognition model
-    recognizer = cv2.FaceRecognizerSF.create(
-        "models/face_recognition_sface_2021dec.onnx", ""
-    )
+    recognizer = get_face_recognizer()
 
     # Align the detected face
     aligned_face = recognizer.alignCrop(image, face)
@@ -86,9 +91,7 @@ def assign_person(embedding_bytes):
 
     vector = np.frombuffer(embedding_bytes, dtype=np.float32).reshape(1, -1)
 
-    recognizer = cv2.FaceRecognizerSF.create(
-        "models/face_recognition_sface_2021dec.onnx", ""
-    )
+    regognizer = get_face_recognizer()
 
     existing_faces = Face.objects.filter(person__isnull=False).select_related("person")
 
