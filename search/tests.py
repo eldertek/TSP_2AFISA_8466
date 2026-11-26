@@ -1,11 +1,17 @@
 import io
+import json
 import shutil
 import tempfile
 import zipfile
 
 import cv2
+from channels.auth import AuthMiddlewareStack
+from channels.layers import get_channel_layer
+from channels.testing import WebsocketCommunicator
 from django.contrib.auth import get_user_model
+from django.contrib.auth.models import AnonymousUser
 from django.core.files.uploadedfile import SimpleUploadedFile
+from django.http import FileResponse
 from django.test import RequestFactory, TestCase, override_settings
 from django.urls import reverse
 from django.utils import timezone
@@ -13,7 +19,9 @@ from django.views.defaults import server_error
 
 from indexing.faces import detect_faces, extract_embedding
 from indexing.models import Album, Face, Person, Photo
+from search.consumers import NotificationConsumer
 from search.forms import SchoolEmailUserCreationForm
+from search.routing import NotificationConsumer
 from search.service import research
 
 
@@ -94,8 +102,9 @@ class SearchAndRemovalTest(TestCase):
             response["Content-Disposition"],
             'attachment; filename="photos.zip"',
         )
+        assert isinstance(response, FileResponse)
 
-        zip_bytes = b"".join(response.streaming_content)
+        zip_bytes = response.getvalue()
         with zipfile.ZipFile(io.BytesIO(zip_bytes)) as archive:
             self.assertEqual(len(archive.namelist()), 1)
             self.assertIn("armstrong", archive.namelist()[0])
@@ -152,3 +161,43 @@ class ErrorPagesTest(TestCase):
         self.assertContains(
             response, b"An internal server error occurred.", status_code=500
         )
+
+
+class NotificationConsumerTest(TestCase):
+    async def test_anonymous_websocket_rejected(self):
+        communicator = WebsocketCommunicator(
+            AuthMiddlewareStack(NotificationConsumer.as_asgi()),
+            "/ws/notifications/",
+        )
+        connected, _ = await communicator.connect()
+
+        self.assertFalse(connected)
+
+    async def test_authenticated_user_receives_notification(self):
+        user = await get_user_model().objects.acreate(
+            username="notif@telecom-sudparis.eu"
+        )
+        await self.client.aforce_login(user)
+        session_key = self.client.cookies["sessionid"].value
+        communicator = WebsocketCommunicator(
+            AuthMiddlewareStack(NotificationConsumer.as_asgi()),
+            "/ws/notifications/",
+            headers=[(b"cookie", f"sessionid={session_key}".encode())],
+        )
+        connected, _ = await communicator.connect()
+
+        self.assertTrue(connected)
+
+        channel_layer = get_channel_layer()
+
+        assert channel_layer is not None
+
+        await channel_layer.group_send(
+            f"user_{user.pk}", {"type": "notify", "message": "New photo in Gala!"}
+        )
+
+        response = await communicator.receive_from(timeout=5)
+
+        self.assertEqual(json.loads(response), {"message": "New photo in Gala!"})
+
+        await communicator.disconnect()
