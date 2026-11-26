@@ -1,11 +1,10 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Indexing</title>
-</head>
-<body>
+{% extends "base.html" %}
+{% load i18n %}
+
+
+{% block title %}{% translate "Indexing" %}{% endblock %}
+
+{% block content %}
     <h1>Indexing</h1>
     <p>Welcome to the Indexing page!</p>
     
@@ -38,5 +37,4 @@
         <button type="submit">Index</button>
     </form>
 
-</body>
-</html>
+{% endblock %}

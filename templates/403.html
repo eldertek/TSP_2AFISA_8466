@@ -1,20 +1,18 @@
+{% extends "base.html" %}
 {% load i18n %}
-{% get_current_language as LANGUAGE_CODE %}
-<!doctype html>
-<html lang="{{ LANGUAGE_CODE }}">
-<head>
-  <meta charset="utf-8">
-  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-  <title>403 - INTêtes</title>
-</head>
-<body class="bg-slate-50 text-slate-900">
-  <main class="mx-auto max-w-6xl p-8">
-    <h1 class="text-3xl font-bold text-black">403</h1>
-    <h2 class="text-2xl font-bold text-lime-500">INTêtes</h2>
-    <p class="mt-2 text-slate-600">{% translate "You do not have permission to access this page." %}</p>
-    <div class="mt-6">
-      <a href="/" class="bg-lime-500 text-white px-4 py-2 rounded">{% translate "Back to home" %}</a>
+{% load static %}
+
+{% block title %}{% translate "403 - INTêtes" %}{% endblock %}
+{% block content %}
+
+  <div class="min-h-[calc(100vh-76px)] flex flex-col items-center justify-center text-center px-6 py-12">
+    <div class="flex items-center justify-center gap-3 sm:gap-5">
+      <span class="error-code-digit">4</span>
+      <img src="{% static 'images/lens.png' %}" alt="0" class="error-lens">
+      <span class="error-code-digit">3</span>
     </div>
-  </main>
-</body>
-</html>
+    <p class="mt-6 text-xl font-semibold text-declic-charcoal">{% translate "You don't have permission to access on this server." %}</p>
+    <a href="{% url 'home' %}" class="btn-declic mt-8 px-6 py-3 inline-block rounded">{% translate "Back to home" %}</a>
+  </div>
+    
+{% endblock %}

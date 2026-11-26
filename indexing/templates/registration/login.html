@@ -1,23 +1,88 @@
+{% extends "base.html" %}
 {% load i18n %}
-{% get_current_language as LANGUAGE_CODE %}
-<!DOCTYPE html>
-<html lang="{{ LANGUAGE_CODE }}">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <title>{% translate "Indexing" %}</title>
-</head>
-<body>
-    <h1>{% translate "Login" %}</h1>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p}}
 
-        <button type="submit">{% translate "Sign in" %}</button>
+
+{% block title %}{% translate "Login" %}{% endblock %}
+{% block body_class %}bg-mesh-declic{% endblock %}
+{% block content %}
+
+
+    <div class="relative py-3 sm:max-w-xl sm:mx-auto">
+    <div
+        class="relative px-4 py-10 bg-white mx-8 md:mx-0 shadow rounded-3xl sm:p-10"
+    >
+        <div class="max-w-md mx-auto">
+        <div class="flex flex-col items-center gap-1 justify-center">
+            <h1>INTêtes</h1>
+            <h3>{% translate "Login" %}</h3>
+          
+        </div>
+        <form method="post" class="declic-form">
+        {% csrf_token %}
+
+        <div class="mt-5">
+            <label
+            class="font-semibold text-sm text-gray-600 pb-1 block"
+            for="login"
+            >{% translate "Academic E-mail" %}</label
+            >
+
+            <input
+            class="border rounded-lg px-3 py-2 mt-1 mb-5 text-sm w-full"
+            type="text"
+            id="login"
+            name="username" required
+            />
+            
+            <label
+            class="font-semibold text-sm text-gray-600 pb-1 block"
+            for="password"
+            >{% translate "Password" %}</label
+            >
+            <input
+            class="border rounded-lg px-3 py-2 mt-1 mb-5 text-sm w-full"
+            type="password"
+            id="password"
+            name="password" required
+            />
+          
+        </div>
+       
+
+        <div class="mt-5">
+            {% if form.errors %}
+            <p class="errorlist">{% translate "Invalid email or password." %}</p>
+            {% endif %}
+            <button
+            class="py-2 px-4 btn-declic text-white w-full transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2 rounded-lg"
+            type="submit"
+            >
+            {% translate "Login" %}
+            </button>
+            
+        </div>
     </form>
-    <a href="{% url 'register' %}">{% translate "Create an account" %}</a>
+        <div class="flex items-center justify-between mt-4">
+            <span class="w-1/5 border-b dark:border-gray-600 md:w-1/4"></span>
+            <a
+            class="text-xs text-gray-500 uppercase dark:text-gray-400 hover:underline"
+            href="{% url 'register' %}"
+            >{% translate "or sign up" %}</a
+            >
+            <span class="w-1/5 border-b dark:border-gray-400 md:w-1/4"></span>
+        </div>
+        </div>
+    </div>
+    </div>
+
 
     
-</body>
-</html>
+{% endblock %}
+
+
+
+
+
+
+
+

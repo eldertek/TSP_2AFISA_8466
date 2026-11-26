@@ -1,0 +1,357 @@
+@font-face {
+    font-family: 'Yaro';
+    src: url('../fonts/yaro-black.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Fabrikat';
+    src: url('../fonts/FabrikatNormal-Medium.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+:root{
+    --declic-lime: #91b80f;
+    --declic-lime-hover: #7A9C0C;
+    --declic-bg: #f7F6F9;
+    --declic-charcoal: #565264;
+    --declic-charcoal-dark: #3F3C4B;
+    --declic-grey: #706677;
+    --declic-mauve: #A6808C;
+    --declic-mauve-soft: rgba(166,128,140,0.14);
+    --declic-border: rgba(86,82,100,0.14);
+    --declic-danger: #B91C1C;
+    --declic-danger-hover: #991B1B;
+}
+
+
+
+body {
+    background-color: var(--declic-bg);
+    color: var(--declic-charcoal);
+    font-family: 'Fabrikat', sans-serif;
+    letter-spacing: 0.1px;
+    min-height: 100vh;
+}
+
+
+
+.font-yaro, h1, h2{
+    font-family: 'Yaro', sans-serif; 
+    letter-spacing: 0.02em;
+}
+
+.font-fabrikat, h3{
+    font-family: 'Fabrikat', sans-serif;
+    letter-spacing: 0.1px;
+}
+
+
+/* couleur pour textes issue de charte graphique */
+.text-declic-lime {color: var(--declic-lime);}
+.text-declic-charcoal {color: var(--declic-charcoal);}
+.text-declic-grey {color: var(--declic-grey);}
+.text-declic-mauve {color: var(--declic-mauve);}
+
+/* barre de navigation */
+.site-header{
+    background-color: var(--declic-charcoal);
+    color: white;
+    border-bottom: 3px solid var(--declic-lime);
+    box-shadow: 0 10px 30px rgba(86,82,100,0.14);
+}
+
+/* fond pour login et register */
+.bg-mesh-declic{
+    background-color:hsla(260,27%,97%,1);
+    background-image:
+        radial-gradient(at 54% 49%, hsla(341,17%,57%,1) 0px, transparent 50%),
+        radial-gradient(at 100% 72%, hsla(73,82%,57%,1) 0px, transparent 50%),
+        radial-gradient(at 12% 80%, hsla(275,7%,43%,1) 0px, transparent 50%),
+        radial-gradient(at 5% 21%, hsla(73,84%,39%,1) 0px, transparent 50%),
+        radial-gradient(at 78% 8%, hsla(253,9%,35%,1) 0px, transparent 50%);
+    background-attachment: fixed;
+}
+
+
+/* Boutons */
+.btn-declic{
+    background-color: var(--declic-lime);
+    color: white;
+    font-family: 'Yaro', sans-serif;
+    font-weight: 600;
+    transition: background-color 0.2s ease, transform 0.15s ease;
+    cursor: pointer;
+}
+
+.btn-declic:hover{
+    background-color: var(--declic-lime-hover);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(145, 184, 15, 0.28);
+
+}
+
+.btn-declic:focus{
+    outline: none;
+    box-shadow: 0 0 0  3px rgba(145,184,15, 0.35);
+}
+
+
+.btn-secondary{
+    background-color: transparent;
+    color: white;
+    border: 1px solid rgba(255,255,255,0.28);
+    border-radius: 0.65rem;
+    font-weight: 500;
+    transition: background-color 0.2s ease, border-color 0.2s ease;
+    cursor: pointer;
+}
+
+.btn-secondary:hover{
+    background-color: rgba(255,255,255,0.12);
+    border-color: white;
+}
+
+
+.btn-danger-outline {
+    background-color: transparent;
+    color: var(--declic-danger);
+    border: 1px solid rgba(185, 28, 28, 0.35);
+    border-radius: 0.65rem;
+    font-weight: 600;
+    transition: background-color 0.2s ease, color 0.2s ease;
+    cursor: pointer;
+}
+
+
+.btn-danger-outline:hover {
+    background-color: var(--declic-danger);
+    color: white;
+}
+
+.declic-card{
+    background-color: white;
+    border: 1px solid var(--declic-border);
+    border-radius: 1.25rem;
+    box-shadow: 0 10px 30px rgba(86,82,100,0.07);
+}
+
+.upload-zone {
+    background-color: white;
+    border: 2px dashed var(--declic-mauve);
+    border-radius: 1.25rem;
+    transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+
+.upload-zone:hover{
+    border-color: var(--declic-lime);
+    background-color: #FCFDFA;
+}
+
+
+
+.photo-card{
+    background-color: white;
+    border: 1px solid var(--declic-border);
+    border-radius: 1rem;
+    overflow: hidden;
+    box-shadow: 0 6px 20px rgba(86,82,100,0.06);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.photo-card:hover{
+    transform: translateY(-3px);
+    box-shadow: 0 14px 28px rgba(86,82,100,0.12);
+    border-color: var(--declic-lime);
+}
+
+.photo-card img{
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.photo-card:hover img{
+    transform: scale(1.03);
+}
+
+.badge-mauve{
+    background-color: var(--declic-mauve-soft);
+    color: var(--declic-charcoal);
+    border: 1px solid rgba(166,128,140,0.35);
+    border-radius: 9999px;
+    font-size: 0.75rem; 
+    font-weight: 600;
+    padding: 0.2rem 0.65rem;
+}
+
+.badge-lime{
+    background-color: rgba(145,184,15,0.14);
+    color: #546B07;
+    border: 1px solid rgba(145,184,15,0.35);
+    border-radius: 9999px;
+    font-size: 0.75rem; 
+    font-weight: 600;
+    padding: 0.2rem 0.65rem;
+}
+
+
+
+
+.declic-form p {
+    margin-bottom: 1.1rem;
+}
+
+.declic-form label{
+    display: block;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #4b5563;
+    margin-bottom: 0.35rem;
+}
+
+.declic-form input,
+.declic-form select {
+    width: 100%;
+    border: 1px solid var(--declic-border);
+    border-radius: 0.65rem;
+    padding: 0.6rem 0.85rem;
+    font-size: 0.875rem;
+    color: var(--declic-charcoal);
+    background-color: #ffffff;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+.declic-form input:focus,
+.declic-form select:focus {
+    outline: none;
+    border-color: var(--declic-lime);
+    box-shadow: 0 0 0 3px rgba(145, 184, 15, 0.2);
+}
+.declic-form .helptext {
+    display: block;
+    font-size: 0.75rem;
+    color: var(--declic-grey);
+    margin-top: 0.3rem;
+}
+.declic-form .errorlist {
+    list-style: none;
+    padding: 0.6rem 0.85rem;
+    margin-bottom: 0.85rem;
+    border-radius: 0.65rem;
+    background-color: #fef2f2;
+    border: 1px solid #fecaca;
+    color: var(--declic-danger);
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+input[type="checkbox"]{
+    accent-color: var(--declic-lime);
+    width: 1.1rem;
+    height: 1.1rem;
+    cursor: pointer;
+}
+
+
+
+/* pour les pages d'erreurs */
+.error-code-digit {
+    font-family: 'Yaro', sans-serif;
+    font-size: clamp(5.5rem, 15vw, 11rem);
+    line-height: 1;
+    color: var(--declic-charcoal);
+    user-select: none;
+}
+.error-lens {
+    width: clamp(6rem, 16vw, 11.5rem);
+    height: clamp(6rem, 16vw, 11.5rem);
+    object-fit: contain;
+    filter: drop-shadow(0 12px 24px rgba(86, 82, 100, 0.22));
+    transition: transform 0.6s ease, filter 0.3s ease;
+}
+
+.error-lens:hover {
+    transform: rotate(35deg) scale(1.04);
+    filter: drop-shadow(0 16px 28px rgba(145, 184, 15, 0.3));
+}
+
+
+
+/* Hero sombre studio (home.html) */
+.hero-studio {
+    background:
+        radial-gradient(circle at 30% 40%, rgba(145, 184, 15, 0.16), transparent 55%),
+        radial-gradient(circle at 72% 55%, rgba(166, 128, 140, 0.18), transparent 55%),
+        linear-gradient(180deg, #2B2836 0%, #3F3C4B 100%);
+    color: #FFFFFF;
+    border-bottom: 3px solid var(--declic-lime);
+}
+
+/* Barre d'upload inspirée Uiverse (mustafa7799) aux couleurs Déclic */
+.upload-pill {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    width: 100%;
+    max-width: 620px;
+    border-radius: 14px;
+    border: 2px solid rgba(145, 184, 15, 0.65);
+    background-color: rgba(255, 255, 255, 0.06);
+    backdrop-filter: blur(10px);
+    padding: 0.6rem 0.7rem 0.6rem 1rem;
+    box-shadow:
+        18px 18px 55px rgba(166, 128, 140, 0.38),
+        -18px -18px 55px rgba(145, 184, 15, 0.34);
+    transition: border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.upload-pill:focus-within,
+.upload-pill:hover {
+    border-color: var(--declic-lime);
+    box-shadow:
+        20px 20px 60px rgba(166, 128, 140, 0.48),
+        -20px -20px 60px rgba(145, 184, 15, 0.45);
+}
+
+/* Input fichier stylisé (sans JS) */
+.upload-file-input {
+    flex: 1;
+    min-width: 0;
+    background: transparent;
+    border: none;
+    outline: none;
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.85);
+    cursor: pointer;
+}
+
+.upload-file-input::file-selector-button {
+    margin-right: 0.85rem;
+    padding: 0.45rem 0.9rem;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    background-color: rgba(255, 255, 255, 0.12);
+    color: #FFFFFF;
+    font-family: 'Fabrikat', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.upload-file-input::file-selector-button:hover {
+    background-color: rgba(145, 184, 15, 0.28);
+    border-color: var(--declic-lime);
+}
+
+/* Contour vert automatique quand une photo est cochée */
+.photo-card:has(input[type="checkbox"]:checked) {
+    border-color: var(--declic-lime);
+    box-shadow: 0 0 0 3px rgba(145, 184, 15, 0.32), 0 12px 24px rgba(86, 82, 100, 0.12);
+}

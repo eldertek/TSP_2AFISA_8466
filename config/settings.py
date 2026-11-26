@@ -128,6 +128,7 @@ LANGUAGE_CODE = "fr"
 LANGUAGES = [("fr", _("French")), ("en", _("English"))]
 LOCALE_PATHS = [BASE_DIR / "locale"]
 
+
 TIME_ZONE = "Europe/Paris"
 
 USE_I18N = True
@@ -142,6 +143,7 @@ USE_TZ = True
 STATIC_URL = "/static/"
 STATIC_ROOT = BASE_DIR / "staticfiles"
 
+STATICFILES_DIRS = [BASE_DIR / "static"]
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"

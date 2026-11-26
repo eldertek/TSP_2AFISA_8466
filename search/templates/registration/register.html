@@ -1,24 +1,100 @@
+{% extends "base.html" %}
 {% load i18n %}
-{% get_current_language as LANGUAGE_CODE %}
 
-<!DOCTYPE html>
-<html lang="{{ LANGUAGE_CODE }}">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <title>{% translate "Register" %}</title>
-</head>
-<body>
+
+{% block title %}{% translate "Register" %}{% endblock %}
+{% block body_class %}bg-mesh-declic{% endblock %}
+{% block content %}
+
+    <div class="relative py-3 sm:max-w-xl sm:mx-auto">
+    <div
+        class="relative px-4 py-10 bg-white mx-8 md:mx-0 shadow rounded-3xl sm:p-10"
+    >
+        <div class="max-w-md mx-auto">
+        <div class="flex flex-col items-center gap-1 justify-center">
+            <h1>INTêtes</h1>
+            <h3>{% translate "Create your account" %}</h3>
+          
+        </div>
     
-    <h1>{% translate "Create an account" %}</h1>
-    <form method="post">
+    <form method="post" class="declic-form">
         {% csrf_token %}
-        {{ form.as_p}}
+        <div class="mt-5">
+            <label
+            class="font-semibold text-sm text-gray-600 pb-1 block"
+            for="login"
+            >{% translate "Academic E-mail" %}</label
+            >
 
-        <button type="submit">{% translate "Sign up" %}</button>
+            <input
+            class="border rounded-lg px-3 py-2 mt-1 mb-5 text-sm w-full"
+            type="text"
+            id="login"
+            name="username" required
+            />
+            
+            <label
+            class="font-semibold text-sm text-gray-600 pb-1 block"
+            for="password1"
+            >{% translate "Password" %}</label
+            >
+            <input
+            class="border rounded-lg px-3 py-2 mt-1 mb-5 text-sm w-full"
+            type="password"
+            id="password1"
+            name="password1" required
+            />
+
+            <label
+            class="font-semibold text-sm text-gray-600 pb-1 block"
+            for="password2"
+            >{% translate "Confirm your password" %}</label
+            >
+            <input
+            class="border rounded-lg px-3 py-2 mt-1 mb-5 text-sm w-full"
+            type="password"
+            id="password2"
+            name="password2" required
+            />
+          
+        </div>
+
+        <div class="mt-5">
+            {% if form.errors %}
+                {% for field in form %}
+                    {{ field.errors }}
+                {% endfor %}
+                {{ form.non_field_errors }}
+
+            {% endif %}
+            <button
+            class="py-2 px-4 btn-declic text-white w-full transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2 rounded-lg"
+            type="submit"
+            >
+            {% translate "Sign up" %}
+            </button>
+        </div>
+
+
+        <div class="flex items-center justify-between mt-4">
+            <span class="w-1/5 border-b dark:border-gray-600 md:w-1/4"></span>
+            <a
+            class="text-xs text-gray-500 uppercase dark:text-gray-400 hover:underline"
+            href="{% url 'login' %}"
+            >{% translate "or sign in" %}</a
+            >
+            <span class="w-1/5 border-b dark:border-gray-400 md:w-1/4"></span>
+        </div>
+
     </form>
+    </div>
+    </div>
+    </div>
 
     
-</body>
-</html>
+{% endblock %}
+
+
+
+
+

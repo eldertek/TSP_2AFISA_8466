@@ -1,0 +1,40 @@
+{% load static %}
+{% load i18n %}
+{% get_current_language as LANGUAGE_CODE %}
+<!doctype html>
+<html lang="{{ LANGUAGE_CODE }}">
+<head>
+  <meta charset="utf-8">
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  <title>{% block title %}INTêtes{% endblock %}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body class="{% block body_class %}{% endblock %}">
+    <main>
+        <header class="site-header">
+            <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+                <!-- LOGO A RAJOUTER -->
+                <a href="{% url 'home' %}" class="font-yaro text-2xl tracking-wide">IN<span class="text-declic-lime">Têtes</span> </a>
+                <div class="flex items-center gap-4">
+                    {% if user.is_authenticated %}
+                        {% if user.is_staff %}
+                            <a href="{% url 'indexing:index' %}" class="text-sm text-white/90 hover:text-[#91B80F] transition">{% translate "Indexing" %}</a>
+                        {% endif %}
+                        <span class="text-sm text-white/75 hidden sm:inline">{{ user.username }}</span>
+                        <form method="post" action="{% url 'logout' %}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn-secondary px-3 py-1.5 text-sm">{% translate "Sign out" %}</button>
+                        </form>
+                    {% endif %}                        
+                </div>
+            </div>
+        </header>
+        {% block content %}
+
+    
+        {% endblock %}
+    </main>
+
+</body>
+</html>
