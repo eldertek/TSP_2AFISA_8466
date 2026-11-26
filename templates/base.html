@@ -26,7 +26,13 @@
                             {% csrf_token %}
                             <button type="submit" class="btn-secondary px-3 py-1.5 text-sm">{% translate "Sign out" %}</button>
                         </form>
-                    {% endif %}                        
+                    {% endif %}  
+                    <form method="post" action="{% url 'set_language' %}" class="lang-switch">
+                        {% csrf_token %}
+                        <input type="hidden" name="next" value="{{ request.get_full_path }}">
+                        <button type="submit" name="language" value="fr" class="lang-btn {% if LANGUAGE_CODE|slice:":2" == 'fr' %}active{% endif %}">FR</button>
+                        <button type="submit" name="language" value="en" class="lang-btn {% if LANGUAGE_CODE|slice:":2" == 'en' %}active{% endif %}">EN</button>
+                    </form>                      
                 </div>
             </div>
         </header>

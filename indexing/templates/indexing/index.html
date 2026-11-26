@@ -5,10 +5,10 @@
 {% block title %}{% translate "Indexing" %}{% endblock %}
 
 {% block content %}
-    <h1>Indexing</h1>
-    <p>Welcome to the Indexing page!</p>
+    <h1>{% translate "Indexing" %}</h1>
+    <p>{% translate "Welcome to the Indexing page!" %}</p>
     
-    <h2>Indexing Form</h2>
+    <h2>{% translate "Indexing Form" %}</h2>
     {% if error %}
         <p style="color: red;">{{ error }}</p>
     {% endif %}
@@ -18,23 +18,23 @@
 
     <form method="post" enctype="multipart/form-data" action="{% url 'indexing:index' %}">
         {% csrf_token %}
-        <label for="album_id">Album:</label>
+        <label for="album_id">{% translate "Album: " %}</label>
         <select id="album_id" name="album_id">
-            <option value="">-- No album --</option>
+            <option value="">{% translate "-- No album --" %}</option>
             {% for album in albums %}
                 <option value="{{ album.id }}">{{ album.name }} ({{ album.event_date|date:"Y-m-d" }})</option>
             {% endfor %}
         </select>
 
-        <label for="album_name">New album name:</label>
+        <label for="album_name">{% translate "New album name: " %}</label>
         <input type="text" id="album_name" name="album_name">
 
-        <label for="event_date">Event date:</label>
+        <label for="event_date">{% translate "Event date: " %}</label>
         <input type="datetime-local" id="event_date" name="event_date">
 
-        <label for="photos">Please upload photos:</label>
+        <label for="photos">{% translate "Please upload photos: " %}</label>
         <input type="file" id="photos" name="photos" accept="image/*" multiple required>
-        <button type="submit">Index</button>
+        <button type="submit">{% translate "Index" %}</button>
     </form>
 
 {% endblock %}

@@ -355,3 +355,39 @@ input[type="checkbox"]{
     border-color: var(--declic-lime);
     box-shadow: 0 0 0 3px rgba(145, 184, 15, 0.32), 0 12px 24px rgba(86, 82, 100, 0.12);
 }
+
+
+
+
+
+/* Switch de langue pilule FR / EN dans le header */
+.lang-switch {
+    display: inline-flex;
+    align-items: center;
+    padding: 2px;
+    border-radius: 9999px;
+    border: 1.5px solid var(--declic-lime);
+    background-color: rgba(255, 255, 255, 0.08);
+}
+
+.lang-btn {
+    border: none;
+    border-radius: 9999px;
+    padding: 0.22rem 0.7rem;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    color: rgba(255, 255, 255, 0.82);
+    background-color: transparent;
+    cursor: pointer;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.lang-btn:hover {
+    color: #FFFFFF;
+}
+
+.lang-btn.active {
+    background-color: var(--declic-lime);
+    color: #FFFFFF;
+}

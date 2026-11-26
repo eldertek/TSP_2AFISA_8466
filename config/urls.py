@@ -23,4 +23,5 @@ urlpatterns = [
     path("", include("search.urls")),
     path("indexing/", include("indexing.urls")),
     path("accounts/", include("django.contrib.auth.urls")),
+    path("i18n/", include("django.conf.urls.i18n")),
 ]
