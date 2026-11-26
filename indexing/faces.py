@@ -91,7 +91,7 @@ def assign_person(embedding_bytes):
 
     vector = np.frombuffer(embedding_bytes, dtype=np.float32).reshape(1, -1)
 
-    regognizer = get_face_recognizer()
+    recognizer = get_face_recognizer()
 
     existing_faces = Face.objects.filter(person__isnull=False).select_related("person")
 
