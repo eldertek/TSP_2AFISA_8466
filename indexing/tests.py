@@ -114,6 +114,9 @@ class PersonClusteringTest(TestCase):
             is_staff=True,
         )
 
+    def tearDown(self):
+        shutil.rmtree(self.temp_media, ignore_errors=True)
+
     def test_assign_person_groups_same_person_anonymously(self):
 
         with override_settings(MEDIA_ROOT=self.temp_media):
@@ -134,14 +137,8 @@ class PersonClusteringTest(TestCase):
                 photo_obj = Photo.objects.create(
                     image=uploaded, album=album, uploaded_by=self.admin
                 )
-                image = cv2.imread(path)
+                index_photo(photo_obj.id)
 
-                for face in detect_faces(image):
-                    Face.objects.create(
-                        photo=photo_obj,
-                        embedding=extract_embedding(image, face),
-                        box_x=int(face[0]),
-                        box_y=int(face[1]),
-                        box_w=int(face[2]),
-                        box_h=int(face[3]),
-                    )
+            self.assertEqual(Face.objects.count(), 5)
+            self.assertEqual(Person.objects.count(), 3)
+            self.assertEqual(Person.objects.filter(name="").count(), 3)

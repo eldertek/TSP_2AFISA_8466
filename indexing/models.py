@@ -54,5 +54,7 @@ class Face(models.Model):
     box_w = models.IntegerField()
     box_h = models.IntegerField()
 
+    photo_id: int  # Type hint for the photo_id attribute
+
     def __str__(self):
-        return f"Face {self.pk} in {self.photo.pk}"
+        return f"Face {self.pk} in {self.photo_id}"

@@ -8,3 +8,10 @@ db.sqlite3
 
 # Vscode settings
 .vscode/
+
+# Django
+media/
+staticfiles/
+
+# Environment variables
+.env

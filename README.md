@@ -34,6 +34,8 @@ Une fois les conteneurs démarrés (`healthy`), l'application est accessible sur
 | `/accounts/login/` | Public | Connexion |
 | `/register/` | Public | Inscription réservée aux adresses `@telecom-sudparis.eu` et `@imt-bs.eu` |
 | `/remove/` | Connecté (`POST`) | Retrait en un clic de ses empreintes biométriques de l'index (F7) |
+| `/download/` | Connecté (`POST`) | Téléchargement en archive ZIP de la sélection de photos (F10) |
+| `/ws/notifications/` | Connecté (`WebSocket`) | Notifications en temps réel lors de la publication de nouvelles photos (F8) |
 
 ---
 
@@ -41,10 +43,10 @@ Une fois les conteneurs démarrés (`healthy`), l'application est accessible sur
 
 La stack orchestrée par [`compose.yaml`](compose.yaml) repose sur **6 services Docker** :
 
-- **`nginx`** (`nginx:alpine`) : reverse proxy exposé sur le port `8080`, sert directement `/static/` et `/media/` via des volumes partagés.
-- **`web`** (Django + Gunicorn) : serveur applicatif web, applique les migrations, collecte les statiques et initialise le compte `admin` au démarrage via [`entrypoint.sh`](entrypoint.sh).
+- **`nginx`** (`nginx:alpine`) : reverse proxy exposé sur le port `8080`, sert directement `/static/` et `/media/` via des volumes partagés et relaie HTTP + WebSockets vers `web`.
+- **`web`** (Django + **Daphne ASGI**) : serveur applicatif web et WebSockets (`channels`), applique les migrations, collecte les statiques et initialise le compte `admin` au démarrage via [`entrypoint.sh`](entrypoint.sh).
 - **`db`** (`postgres:17-alpine`) : base de données PostgreSQL avec healthcheck et volume persistant `postgres_data`.
-- **`redis`** (`redis:7-alpine`) : broker et backend de résultats Celery.
+- **`redis`** (`redis:7-alpine`) : broker/backend Celery et Channel Layer Redis (`channels-redis`) pour les WebSockets.
 - **`worker_indexing`** (Celery `-Q indexing`) : traite en arrière-plan la détection des visages (**YuNet**) et l'extraction des empreintes biométriques (**SFace**, 128 flottants `float32` stockés en 512 octets).
 - **`worker_search`** (Celery `-Q search`) : file prioritaire dédiée aux recherches par similarité cosinus (seuil OpenCV `0.363`), pour qu'une recherche ne soit pas bloquée par l'indexation d'un album.
 
@@ -66,17 +68,18 @@ La stack orchestrée par [`compose.yaml`](compose.yaml) repose sur **6 services 
 - **T8** : Inscription et connexion réservées aux adresses académiques (`@telecom-sudparis.eu`, `@imt-bs.eu`).
 - **T10** : Retrait de l'index en un clic (`/remove/`, backend + bouton avec confirmation) et gestion des albums/visages via `/admin/`.
 - **F10** : Sélection de photos dans la galerie et téléchargement en une seule archive ZIP (`/download/`) avec contrôle d'accès.
+- **T11 (backend)** : Notifications en temps réel via Django Channels, Daphne (ASGI) et Redis (`/ws/notifications/`, déclenché depuis `worker_indexing`).
 - **T15** : Architecture asynchrone Redis + Celery avec deux files dédiées (`indexing` et `search`).
 - **F1** : Page `/indexing/` réservée au staff permettant de créer/choisir un album et d'uploader plusieurs photos d'un coup.
 - **Pages d'erreur** : templates personnalisés `403.html`, `404.html` et `500.html` (testés).
-- **Docker & CI/CD** : `Dockerfile`, `compose.yaml` (PostgreSQL, Nginx, Gunicorn, healthchecks), `run.sh`, 15 tests automatisés et pipeline GitHub Actions (`.github/workflows/ci.yml`).
+- **Docker & CI/CD** : `Dockerfile` (Daphne ASGI), `compose.yaml` (PostgreSQL, Nginx, Redis, workers Celery, healthchecks), `run.sh`, tests automatisés et pipeline GitHub Actions (`.github/workflows/ci.yml`).
 
 ### En cours
-- **T5** : Design final de l'interface, habillage des pages d'erreur `403`/`404`/`500` et finalisation de l'i18n.
+- **T5** : Design final de l'interface, habillage des pages d'erreur `403`/`404`/`500`, HTMX et finalisation de l'i18n.
+- **T11 (front)** : Connexion client WebSocket (`new WebSocket("/ws/notifications/")`) dans `home.html`.
 - **T12** : Intégration finale de bout en bout.
 
 ### À faire / Optionnel
-- **T11** *(optionnel)* : Notifications en temps réel lors de nouveaux albums (F8, Channels/WebSockets).
 - **T13 & T14** : Recette avec le client, vérifications finales sur clone neuf et slides de soutenance.
 - **T9** *(selon temps disponible)* : Déploiement sur le serveur MiNET et sauvegarde.
 
