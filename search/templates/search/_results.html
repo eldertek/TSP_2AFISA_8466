@@ -1,0 +1,50 @@
+
+{% load i18n %}
+
+
+
+
+    {% if results %}
+      <form method="post" action="{% url 'download_archive' %}">
+        {% csrf_token %}
+        <div class="flex flex-wrap items-center justify-between gap-4 mb-6">
+          <div class="flex items-center gap-3">
+            <h2 class="text-2xl text-declic-charcoal">{% translate "Your matching photos" %}</h2>
+            <span class="badge-mauve">{{ results|length }}</span>
+          </div>
+          <button type="submit" class="btn-declic px-5 py-2.5">{% translate "Download selection" %}</button>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {% for result in results %}
+            <div class="photo-card">
+              <a href="{{ result.photo }}" target="_blank"><img src="{{ result.photo }}" alt="{% translate 'Photo' %}" class="w-full"></a>
+            
+            <div class="p-4 flex items-center justify-between gap-3">
+              {% if result.event == "no-album" %}
+                {% translate "No album." %}
+              {% else %}
+                <p class="font-semibold text-declic-charcoal">{% translate "Event : " %}{{ result.event }} </p>
+
+              {% endif %}
+                <p class="text-xs text-declic-grey">{% translate "Date :" %} {{ result.date }} </p>
+                            
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="badge-lime">{{ result.score }}</span>
+              <label class="flex items-center gap-1.5 cursor-pointer text-xs text-declic-grey">
+                <input type="checkbox" name="photo_ids" value="{{ result.photo_id }}">
+                {% translate "Select" %}
+              </label>
+              </div>
+              
+            </div>
+            {% endfor %}
+        </div>
+      </form>
+  
+  {% elif request.method == "POST" %}
+    <div class="declic-card p-10 text-center text-declic-grey">
+        {% translate "No results found." %}
+    </div>
+  {% endif %}
+

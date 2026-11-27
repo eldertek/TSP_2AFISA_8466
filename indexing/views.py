@@ -3,6 +3,7 @@ from django.core.exceptions import PermissionDenied
 from django.shortcuts import render
 from django.utils import timezone
 from django.utils.dateparse import parse_datetime
+from django.utils.translation import gettext as _
 
 from indexing.models import Album, Photo
 from indexing.tasks import index_photo
@@ -26,7 +27,7 @@ def index(request):
             try:
                 event_date = parse_datetime(event_date_str)
                 if event_date is None:
-                    raise ValueError("Invalid date format.")
+                    raise ValueError(_("Invalid date format."))
                 if timezone.is_naive(event_date):
                     event_date = timezone.make_aware(
                         event_date, timezone.get_current_timezone()
@@ -47,7 +48,7 @@ def index(request):
                 return render(
                     request,
                     "indexing/index.html",
-                    {"albums": albums, "error": "Selected album does not exist."},
+                    {"albums": albums, "error": _("Selected album does not exist.")},
                 )
 
         uploaded_files = request.FILES.getlist("photos")
@@ -64,7 +65,8 @@ def index(request):
             request,
             "indexing/index.html",
             {
-                "message": f"{len(uploaded_files)} photos uploaded and queued for indexing.",
+                "message": _("%(count)d photos uploaded and queued for indexing.")
+                % {"count": len(uploaded_files)},
                 "albums": albums,
             },
         )

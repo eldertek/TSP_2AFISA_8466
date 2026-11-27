@@ -479,3 +479,49 @@ input[type="checkbox"] {
         opacity: 1;
     }
 }
+
+/* Ergonomie mobile : barre d'import accueil & zone d'upload indexation */
+.upload-zone .upload-file-input {
+    width: 100%;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+@media (max-width: 640px) {
+    .upload-pill {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.75rem;
+        padding: 0.85rem;
+        border-radius: 14px;
+        box-shadow:
+            0 10px 26px rgba(229, 123, 158, 0.22),
+            0 -6px 20px rgba(134, 201, 244, 0.28);
+    }
+
+    .upload-pill .upload-file-input,
+    .upload-zone .upload-file-input {
+        width: 100%;
+        display: block;
+        text-align: center;
+        font-size: 0.85rem;
+    }
+
+    .upload-pill .upload-file-input::file-selector-button,
+    .upload-zone .upload-file-input::file-selector-button {
+        display: block;
+        width: 100%;
+        min-height: 44px;
+        margin: 0 0 0.5rem 0;
+        padding: 0.65rem 1rem;
+        font-size: 0.9rem;
+    }
+
+    .upload-pill .btn-declic {
+        width: 100%;
+        min-height: 44px;
+        padding: 0.75rem 1rem;
+        font-size: 0.95rem;
+    }
+}

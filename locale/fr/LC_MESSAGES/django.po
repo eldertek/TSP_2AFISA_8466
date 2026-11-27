@@ -3,8 +3,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: INTêtes\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-26 15:56+0100\n"
-"PO-Revision-Date: 2026-11-26 16:00+0100\n"
+"POT-Creation-Date: 2026-11-27 15:50+0100\n"
+"PO-Revision-Date: 2026-11-27 15:50+0100\n"
 "Last-Translator: Amandine LINCK\n"
 "Language-Team: French\n"
 "Language: fr\n"
@@ -22,39 +22,43 @@ msgid "English"
 msgstr "Anglais"
 
 #: .\indexing\templates\indexing\index.html:5
-#: .\indexing\templates\indexing\index.html:8 .\templates\base.html:22
+#: .\indexing\templates\indexing\index.html:11 .\templates\base.html:23
 msgid "Indexing"
 msgstr "Indexation"
 
-#: .\indexing\templates\indexing\index.html:9
+#: .\indexing\templates\indexing\index.html:12
 msgid "Welcome to the Indexing page!"
 msgstr "Bienvenue sur la page d'indexation !"
 
-#: .\indexing\templates\indexing\index.html:11
+#: .\indexing\templates\indexing\index.html:18
 msgid "Indexing Form"
 msgstr "Formulaire d'indexation"
 
-#: .\indexing\templates\indexing\index.html:21
+#: .\indexing\templates\indexing\index.html:29
 msgid "Album: "
 msgstr "Album : "
 
-#: .\indexing\templates\indexing\index.html:23
+#: .\indexing\templates\indexing\index.html:31
 msgid "-- No album --"
 msgstr "-- Sans album --"
 
-#: .\indexing\templates\indexing\index.html:29
+#: .\indexing\templates\indexing\index.html:39
+msgid "Or create a new album"
+msgstr "Ou créer un nouvel album"
+
+#: .\indexing\templates\indexing\index.html:44
 msgid "New album name: "
 msgstr "Nom du nouvel album : "
 
-#: .\indexing\templates\indexing\index.html:32
+#: .\indexing\templates\indexing\index.html:48
 msgid "Event date: "
 msgstr "Date de l'événement : "
 
-#: .\indexing\templates\indexing\index.html:35
+#: .\indexing\templates\indexing\index.html:53
 msgid "Please upload photos: "
 msgstr "Sélectionnez les photos à importer : "
 
-#: .\indexing\templates\indexing\index.html:37
+#: .\indexing\templates\indexing\index.html:57
 msgid "Index"
 msgstr "Indexer"
 
@@ -110,6 +114,38 @@ msgstr "S'inscrire"
 msgid "or sign in"
 msgstr "ou se connecter"
 
+#: .\search\templates\search\_results.html:12
+msgid "Your matching photos"
+msgstr "Vos photos correspondantes"
+
+#: .\search\templates\search\_results.html:15
+msgid "Download selection"
+msgstr "Télécharger la sélection"
+
+#: .\search\templates\search\_results.html:20
+msgid "Photo"
+msgstr "Photo"
+
+#: .\search\templates\search\_results.html:24
+msgid "No album."
+msgstr "Sans album."
+
+#: .\search\templates\search\_results.html:26
+msgid "Event : "
+msgstr "Événement : "
+
+#: .\search\templates\search\_results.html:29
+msgid "Date :"
+msgstr "Date :"
+
+#: .\search\templates\search\_results.html:36
+msgid "Select"
+msgstr "Sélectionner"
+
+#: .\search\templates\search\_results.html:47
+msgid "No results found."
+msgstr "Aucun résultat trouvé."
+
 #: .\search\templates\search\home.html:9
 msgid "Retrieve your photos with"
 msgstr "Retrouvez vos photos avec"
@@ -122,47 +158,19 @@ msgstr "Importez une photo de vous pour retrouver les moments où vous apparaiss
 msgid "Upload"
 msgstr "Rechercher"
 
-#: .\search\templates\search\home.html:26
-msgid "Your matching photos"
-msgstr "Vos photos correspondantes"
+#: .\search\templates\search\home.html:17
+msgid "Searching for your photos..."
+msgstr "Recherche de vos photos en cours..."
 
-#: .\search\templates\search\home.html:29
-msgid "Download selection"
-msgstr "Télécharger la sélection"
-
-#: .\search\templates\search\home.html:34
-msgid "Photo"
-msgstr "Photo"
-
-#: .\search\templates\search\home.html:38
-msgid "No album."
-msgstr "Sans album."
-
-#: .\search\templates\search\home.html:40
-msgid "Event : "
-msgstr "Événement : "
-
-#: .\search\templates\search\home.html:43
-msgid "Date :"
-msgstr "Date :"
-
-#: .\search\templates\search\home.html:50
-msgid "Select"
-msgstr "Sélectionner"
-
-#: .\search\templates\search\home.html:61
-msgid "No results found."
-msgstr "Aucun résultat trouvé."
-
-#: .\search\templates\search\home.html:68
+#: .\search\templates\search\home.html:27
 msgid "Your facial data is used solely for photo matching."
 msgstr "Vos données faciales servent uniquement à retrouver vos photos."
 
-#: .\search\templates\search\home.html:69
+#: .\search\templates\search\home.html:28
 msgid "Are you sure? Your face data will be permanently deleted."
 msgstr "Voulez-vous vraiment supprimer vos données faciales ? Cette action est définitive."
 
-#: .\search\templates\search\home.html:71
+#: .\search\templates\search\home.html:30
 msgid "Remove my face data"
 msgstr "Supprimer mes données faciales"
 
@@ -186,6 +194,20 @@ msgstr "404 - INTêtes"
 msgid "The page you are looking for does not exist."
 msgstr "La page que vous recherchez n'existe pas."
 
-#: .\templates\base.html:27
+#: .\templates\base.html:28
 msgid "Sign out"
 msgstr "Déconnexion"
+
+
+#: .\indexing\views.py:32
+msgid "Invalid date format."
+msgstr "Format de date invalide."
+
+#: .\indexing\views.py:53
+msgid "Selected album does not exist."
+msgstr "L'album sélectionné n'existe pas."
+
+#: .\indexing\views.py:70
+#, python-format
+msgid "%(count)d photos uploaded and queued for indexing."
+msgstr "%(count)d photos importées et mises en file d'indexation."
