@@ -14,21 +14,18 @@
     font-display: swap;
 }
 
-:root{
-    --declic-lime: #91b80f;
-    --declic-lime-hover: #7A9C0C;
-    --declic-bg: #f7F6F9;
-    --declic-charcoal: #565264;
-    --declic-charcoal-dark: #3F3C4B;
-    --declic-grey: #706677;
-    --declic-mauve: #A6808C;
-    --declic-mauve-soft: rgba(166,128,140,0.14);
-    --declic-border: rgba(86,82,100,0.14);
-    --declic-danger: #B91C1C;
-    --declic-danger-hover: #991B1B;
+:root {
+    --declic-lime: #E57B9E;            /* Rose pop : boutons principaux & focus */
+    --declic-lime-hover: #D46087;
+    --declic-bg: #FFFFFF;              /* Fond galerie blanc pur */
+    --declic-charcoal: #1F2433;        /* Encre sombre : header & textes lisibles */
+    --declic-grey: #5F6478;            /* Textes secondaires */
+    --declic-mint: #AAF1E1;            /* Menthe frais */
+    --declic-sky: #86C9F4;             /* Bleu ciel */
+    --declic-lilac: #D0C5D0;           /* Lilas doux */
+    --declic-border: rgba(208, 197, 208, 0.75);
+    --declic-danger: #C93B5B;
 }
-
-
 
 body {
     background-color: var(--declic-bg);
@@ -38,179 +35,173 @@ body {
     min-height: 100vh;
 }
 
-
-
-.font-yaro, h1, h2{
-    font-family: 'Yaro', sans-serif; 
+.font-yaro, h1, h2 {
+    font-family: 'Yaro', sans-serif;
     letter-spacing: 0.02em;
 }
 
-.font-fabrikat, h3{
+.font-fabrikat, h3 {
     font-family: 'Fabrikat', sans-serif;
     letter-spacing: 0.1px;
 }
 
+/* Couleurs utilitaires */
+.text-declic-lime { color: var(--declic-lime); }
+.text-declic-charcoal { color: var(--declic-charcoal); }
+.text-declic-grey { color: var(--declic-grey); }
+.text-declic-mauve { color: var(--declic-lime); }
 
-/* couleur pour textes issue de charte graphique */
-.text-declic-lime {color: var(--declic-lime);}
-.text-declic-charcoal {color: var(--declic-charcoal);}
-.text-declic-grey {color: var(--declic-grey);}
-.text-declic-mauve {color: var(--declic-mauve);}
-
-/* barre de navigation */
-.site-header{
+/* Barre de navigation sombre pour trancher avec la zone pastel */
+.site-header {
     background-color: var(--declic-charcoal);
     color: white;
-    border-bottom: 3px solid var(--declic-lime);
-    box-shadow: 0 10px 30px rgba(86,82,100,0.14);
+    border-bottom: 3px solid var(--declic-mint);
+    box-shadow: 0 8px 24px rgba(31, 36, 51, 0.14);
 }
 
-/* fond pour login et register */
-.bg-mesh-declic{
-    background-color:hsla(260,27%,97%,1);
+/* Fond mesh pour login et register : menthe + bleu ciel + rose + lilas */
+.bg-mesh-declic {
+    background-color: #FFFFFF;
     background-image:
-        radial-gradient(at 54% 49%, hsla(341,17%,57%,1) 0px, transparent 50%),
-        radial-gradient(at 100% 72%, hsla(73,82%,57%,1) 0px, transparent 50%),
-        radial-gradient(at 12% 80%, hsla(275,7%,43%,1) 0px, transparent 50%),
-        radial-gradient(at 5% 21%, hsla(73,84%,39%,1) 0px, transparent 50%),
-        radial-gradient(at 78% 8%, hsla(253,9%,35%,1) 0px, transparent 50%);
+        radial-gradient(at 10% 15%, rgba(170, 241, 225, 0.85) 0px, transparent 52%),
+        radial-gradient(at 88% 18%, rgba(134, 201, 244, 0.72) 0px, transparent 52%),
+        radial-gradient(at 82% 86%, rgba(229, 123, 158, 0.45) 0px, transparent 52%),
+        radial-gradient(at 14% 84%, rgba(208, 197, 208, 0.65) 0px, transparent 52%);
     background-attachment: fixed;
 }
 
-
-/* Boutons */
-.btn-declic{
+/* Bouton principal (rose pop sur fond clair) */
+.btn-declic {
     background-color: var(--declic-lime);
     color: white;
     font-family: 'Yaro', sans-serif;
     font-weight: 600;
-    transition: background-color 0.2s ease, transform 0.15s ease;
+    border-radius: 0.65rem;
+    transition: background-color 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
     cursor: pointer;
 }
 
-.btn-declic:hover{
+.btn-declic:hover {
     background-color: var(--declic-lime-hover);
     transform: translateY(-1px);
-    box-shadow: 0 6px 16px rgba(145, 184, 15, 0.28);
-
+    box-shadow: 0 6px 18px rgba(229, 123, 158, 0.38);
 }
 
-.btn-declic:focus{
+.btn-declic:focus {
     outline: none;
-    box-shadow: 0 0 0  3px rgba(145,184,15, 0.35);
+    box-shadow: 0 0 0 3px rgba(229, 123, 158, 0.35);
 }
 
-
-.btn-secondary{
+.btn-secondary {
     background-color: transparent;
     color: white;
-    border: 1px solid rgba(255,255,255,0.28);
+    border: 1px solid rgba(170, 241, 225, 0.50);
     border-radius: 0.65rem;
     font-weight: 500;
     transition: background-color 0.2s ease, border-color 0.2s ease;
     cursor: pointer;
 }
 
-.btn-secondary:hover{
-    background-color: rgba(255,255,255,0.12);
-    border-color: white;
+.btn-secondary:hover {
+    background-color: rgba(170, 241, 225, 0.16);
+    border-color: var(--declic-mint);
 }
 
-
 .btn-danger-outline {
-    background-color: transparent;
+    background-color: white;
     color: var(--declic-danger);
-    border: 1px solid rgba(185, 28, 28, 0.35);
+    border: 1.5px solid var(--declic-danger);
     border-radius: 0.65rem;
     font-weight: 600;
     transition: background-color 0.2s ease, color 0.2s ease;
     cursor: pointer;
 }
 
-
 .btn-danger-outline:hover {
     background-color: var(--declic-danger);
     color: white;
 }
 
-.declic-card{
+.declic-card {
     background-color: white;
     border: 1px solid var(--declic-border);
     border-radius: 1.25rem;
-    box-shadow: 0 10px 30px rgba(86,82,100,0.07);
+    box-shadow: 0 10px 30px rgba(31, 36, 51, 0.08);
 }
 
 .upload-zone {
     background-color: white;
-    border: 2px dashed var(--declic-mauve);
+    border: 2px dashed var(--declic-sky);
     border-radius: 1.25rem;
     transition: border-color 0.2s ease, background-color 0.2s ease;
 }
 
-.upload-zone:hover{
+.upload-zone:hover {
     border-color: var(--declic-lime);
-    background-color: #FCFDFA;
 }
 
-
-
-.photo-card{
+/* Cartes galerie photo */
+.photo-card {
     background-color: white;
     border: 1px solid var(--declic-border);
     border-radius: 1rem;
     overflow: hidden;
-    box-shadow: 0 6px 20px rgba(86,82,100,0.06);
+    box-shadow: 0 6px 20px rgba(31, 36, 51, 0.06);
     transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
 }
 
-.photo-card:hover{
+.photo-card:hover {
     transform: translateY(-3px);
-    box-shadow: 0 14px 28px rgba(86,82,100,0.12);
-    border-color: var(--declic-lime);
+    box-shadow: 0 14px 28px rgba(31, 36, 51, 0.12);
+    border-color: var(--declic-sky);
 }
 
-.photo-card img{
+.photo-card img {
     aspect-ratio: 4 / 3;
     object-fit: cover;
     transition: transform 0.3s ease;
 }
 
-.photo-card:hover img{
+.photo-card:hover img {
     transform: scale(1.03);
 }
 
-.badge-mauve{
-    background-color: var(--declic-mauve-soft);
+.photo-card:has(input[type="checkbox"]:checked) {
+    border-color: var(--declic-lime);
+    box-shadow: 0 0 0 3px rgba(229, 123, 158, 0.32), 0 12px 24px rgba(31, 36, 51, 0.12);
+}
+
+/* Badges : bleu ciel (compteur) et menthe (score) */
+.badge-mauve {
+    background-color: rgba(134, 201, 244, 0.32);
     color: var(--declic-charcoal);
-    border: 1px solid rgba(166,128,140,0.35);
+    border: 1px solid var(--declic-sky);
     border-radius: 9999px;
-    font-size: 0.75rem; 
-    font-weight: 600;
+    font-size: 0.75rem;
+    font-weight: 700;
     padding: 0.2rem 0.65rem;
 }
 
-.badge-lime{
-    background-color: rgba(145,184,15,0.14);
-    color: #546B07;
-    border: 1px solid rgba(145,184,15,0.35);
+.badge-lime {
+    background-color: var(--declic-mint);
+    color: var(--declic-charcoal);
+    border: 1px solid rgba(31, 36, 51, 0.12);
     border-radius: 9999px;
-    font-size: 0.75rem; 
-    font-weight: 600;
+    font-size: 0.75rem;
+    font-weight: 700;
     padding: 0.2rem 0.65rem;
 }
 
-
-
-
+/* Formulaires Django */
 .declic-form p {
     margin-bottom: 1.1rem;
 }
 
-.declic-form label{
+.declic-form label {
     display: block;
     font-size: 0.875rem;
     font-weight: 600;
-    color: #4b5563;
+    color: var(--declic-charcoal);
     margin-bottom: 0.35rem;
 }
 
@@ -225,40 +216,41 @@ body {
     background-color: #ffffff;
     transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
+
 .declic-form input:focus,
 .declic-form select:focus {
     outline: none;
-    border-color: var(--declic-lime);
-    box-shadow: 0 0 0 3px rgba(145, 184, 15, 0.2);
+    border-color: var(--declic-sky);
+    box-shadow: 0 0 0 3px rgba(134, 201, 244, 0.35);
 }
+
 .declic-form .helptext {
     display: block;
     font-size: 0.75rem;
     color: var(--declic-grey);
     margin-top: 0.3rem;
 }
+
 .declic-form .errorlist {
     list-style: none;
     padding: 0.6rem 0.85rem;
     margin-bottom: 0.85rem;
     border-radius: 0.65rem;
-    background-color: #fef2f2;
-    border: 1px solid #fecaca;
+    background-color: rgba(229, 123, 158, 0.14);
+    border: 1px solid var(--declic-lime);
     color: var(--declic-danger);
     font-size: 0.8rem;
-    font-weight: 500;
+    font-weight: 600;
 }
 
-input[type="checkbox"]{
+input[type="checkbox"] {
     accent-color: var(--declic-lime);
     width: 1.1rem;
     height: 1.1rem;
     cursor: pointer;
 }
 
-
-
-/* pour les pages d'erreurs */
+/* Pages d'erreur 403 / 404 / 500 */
 .error-code-digit {
     font-family: 'Yaro', sans-serif;
     font-size: clamp(5.5rem, 15vw, 11rem);
@@ -266,32 +258,70 @@ input[type="checkbox"]{
     color: var(--declic-charcoal);
     user-select: none;
 }
+
 .error-lens {
     width: clamp(6rem, 16vw, 11.5rem);
     height: clamp(6rem, 16vw, 11.5rem);
     object-fit: contain;
-    filter: drop-shadow(0 12px 24px rgba(86, 82, 100, 0.22));
+    filter: drop-shadow(0 12px 24px rgba(31, 36, 51, 0.20));
     transition: transform 0.6s ease, filter 0.3s ease;
 }
 
 .error-lens:hover {
     transform: rotate(35deg) scale(1.04);
-    filter: drop-shadow(0 16px 28px rgba(145, 184, 15, 0.3));
+    filter: drop-shadow(0 16px 28px rgba(134, 201, 244, 0.45));
 }
 
-
-
-/* Hero sombre studio (home.html) */
+/* Zone de recherche pastel lumineuse : menthe + bleu ciel + touche lilas */
 .hero-studio {
     background:
-        radial-gradient(circle at 30% 40%, rgba(145, 184, 15, 0.16), transparent 55%),
-        radial-gradient(circle at 72% 55%, rgba(166, 128, 140, 0.18), transparent 55%),
-        linear-gradient(180deg, #2B2836 0%, #3F3C4B 100%);
-    color: #FFFFFF;
-    border-bottom: 3px solid var(--declic-lime);
+        radial-gradient(circle at 12% 25%, rgba(170, 241, 225, 0.75), transparent 52%),
+        radial-gradient(circle at 88% 30%, rgba(134, 201, 244, 0.55), transparent 52%),
+        radial-gradient(circle at 55% 95%, rgba(208, 197, 208, 0.45), transparent 55%),
+        #F8FBFD;
+    color: var(--declic-charcoal);
+    border-bottom: 2px solid var(--declic-lilac);
 }
 
-/* Barre d'upload inspirée Uiverse (mustafa7799) aux couleurs Déclic */
+.hero-studio h1 {
+    color: var(--declic-charcoal);
+}
+
+.hero-studio p {
+    color: var(--declic-grey);
+}
+
+/* Dégradé dynamique fluide dans les lettres de INTêtes */
+.hero-studio .text-declic-lime {
+    background: linear-gradient(
+        90deg,
+        #E57B9E 0%,
+        #66B6EC 33%,
+        #48C9B0 66%,
+        #B594B8 85%,
+        #E57B9E 100%
+    );
+    background-size: 280% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    display: inline-block;
+    animation: intetes-gradient 7s ease-in-out infinite;
+}
+
+@keyframes intetes-gradient {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+/* Barre d'upload blanche avec double halo bleu ciel / rose pop */
 .upload-pill {
     position: relative;
     display: flex;
@@ -299,15 +329,14 @@ input[type="checkbox"]{
     justify-content: space-between;
     gap: 0.75rem;
     width: 100%;
-    max-width: 620px;
+    max-width: 640px;
     border-radius: 14px;
-    border: 2px solid rgba(145, 184, 15, 0.65);
-    background-color: rgba(255, 255, 255, 0.06);
-    backdrop-filter: blur(10px);
+    border: 2px solid var(--declic-sky);
+    background-color: #FFFFFF;
     padding: 0.6rem 0.7rem 0.6rem 1rem;
     box-shadow:
-        18px 18px 55px rgba(166, 128, 140, 0.38),
-        -18px -18px 55px rgba(145, 184, 15, 0.34);
+        16px 16px 44px rgba(229, 123, 158, 0.28),
+        -16px -16px 44px rgba(134, 201, 244, 0.45);
     transition: border-color 0.25s ease, box-shadow 0.25s ease;
 }
 
@@ -315,11 +344,10 @@ input[type="checkbox"]{
 .upload-pill:hover {
     border-color: var(--declic-lime);
     box-shadow:
-        20px 20px 60px rgba(166, 128, 140, 0.48),
-        -20px -20px 60px rgba(145, 184, 15, 0.45);
+        18px 18px 48px rgba(229, 123, 158, 0.36),
+        -18px -18px 48px rgba(170, 241, 225, 0.65);
 }
 
-/* Input fichier stylisé (sans JS) */
 .upload-file-input {
     flex: 1;
     min-width: 0;
@@ -327,7 +355,7 @@ input[type="checkbox"]{
     border: none;
     outline: none;
     font-size: 0.9rem;
-    color: rgba(255, 255, 255, 0.85);
+    color: var(--declic-charcoal);
     cursor: pointer;
 }
 
@@ -335,39 +363,30 @@ input[type="checkbox"]{
     margin-right: 0.85rem;
     padding: 0.45rem 0.9rem;
     border-radius: 8px;
-    border: 1px solid rgba(255, 255, 255, 0.25);
-    background-color: rgba(255, 255, 255, 0.12);
-    color: #FFFFFF;
+    border: 1px solid rgba(31, 36, 51, 0.12);
+    background-color: var(--declic-mint);
+    color: var(--declic-charcoal);
     font-family: 'Fabrikat', sans-serif;
     font-size: 0.82rem;
-    font-weight: 600;
+    font-weight: 700;
     cursor: pointer;
     transition: background-color 0.2s ease, border-color 0.2s ease;
 }
 
 .upload-file-input::file-selector-button:hover {
-    background-color: rgba(145, 184, 15, 0.28);
-    border-color: var(--declic-lime);
+    background-color: var(--declic-sky);
+    color: #FFFFFF;
+    border-color: var(--declic-sky);
 }
 
-/* Contour vert automatique quand une photo est cochée */
-.photo-card:has(input[type="checkbox"]:checked) {
-    border-color: var(--declic-lime);
-    box-shadow: 0 0 0 3px rgba(145, 184, 15, 0.32), 0 12px 24px rgba(86, 82, 100, 0.12);
-}
-
-
-
-
-
-/* Switch de langue pilule FR / EN dans le header */
+/* Switch de langue pilule FR / EN en menthe sur le header sombre */
 .lang-switch {
     display: inline-flex;
     align-items: center;
     padding: 2px;
     border-radius: 9999px;
-    border: 1.5px solid var(--declic-lime);
-    background-color: rgba(255, 255, 255, 0.08);
+    border: 1.5px solid var(--declic-mint);
+    background-color: rgba(170, 241, 225, 0.10);
 }
 
 .lang-btn {
@@ -377,7 +396,7 @@ input[type="checkbox"]{
     font-size: 0.75rem;
     font-weight: 700;
     letter-spacing: 0.04em;
-    color: rgba(255, 255, 255, 0.82);
+    color: rgba(255, 255, 255, 0.88);
     background-color: transparent;
     cursor: pointer;
     transition: background-color 0.2s ease, color 0.2s ease;
@@ -388,6 +407,6 @@ input[type="checkbox"]{
 }
 
 .lang-btn.active {
-    background-color: var(--declic-lime);
-    color: #FFFFFF;
+    background-color: var(--declic-mint);
+    color: var(--declic-charcoal);
 }

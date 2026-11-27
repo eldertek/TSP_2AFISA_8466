@@ -19,7 +19,7 @@
                 <div class="flex items-center gap-4">
                     {% if user.is_authenticated %}
                         {% if user.is_staff %}
-                            <a href="{% url 'indexing:index' %}" class="text-sm text-white/90 hover:text-[#91B80F] transition">{% translate "Indexing" %}</a>
+                            <a href="{% url 'indexing:index' %}" class="text-sm text-white/90 hover:text-[#E1A1BA] transition">{% translate "Indexing" %}</a>
                         {% endif %}
                         <span class="text-sm text-white/75 hidden sm:inline">{{ user.username }}</span>
                         <form method="post" action="{% url 'logout' %}">
