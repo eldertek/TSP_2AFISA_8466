@@ -9,58 +9,17 @@
         {% translate "Retrieve your photos with" %} <span class="text-declic-lime">INTêtes</span>
       </h1>
       <p class="mt-3 mb-8 text-white/75 text-base">{% translate "Upload a photo of yourself to find moments where you appear !" %}</p>
-      <form method="post" enctype="multipart/form-data" action="{% url 'home' %}" class="upload-pill mx-auto">
+      <form method="post" enctype="multipart/form-data" action="{% url 'home' %}" class="upload-pill mx-auto" hx-post="{% url 'home' %}" hx-encoding="multipart/form-data" hx-target="#search-results" hx-swap="innerHTML" hx-indicator="#search-loading">
         {% csrf_token %}
         <input type="file" name="photo" accept="image/*" required class="upload-file-input">
         <button type="submit" class="btn-declic px-6 py-2.5 shrink-0">{% translate "Upload" %}</button>
       </form>
+      <p id="search-loading" class="htmx-indicator mt-4 text-sm font-semibold">{% translate "Searching for your photos..." %}</p>
     </div>
  </section>
 
-  <section class="max-w-6xl mx-auto px-6 py-10">
-    {% if results %}
-      <form method="post" action="{% url 'download_archive' %}">
-        {% csrf_token %}
-        <div class="flex flex-wrap items-center justify-between gap-4 mb-6">
-          <div class="flex items-center gap-3">
-            <h2 class="text-2xl text-declic-charcoal">{% translate "Your matching photos" %}</h2>
-            <span class="badge-mauve">{{ results|length }}</span>
-          </div>
-          <button type="submit" class="btn-declic px-5 py-2.5">{% translate "Download selection" %}</button>
-        </div>
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {% for result in results %}
-            <div class="photo-card">
-              <a href="{{ result.photo }}" target="_blank"><img src="{{ result.photo }}" alt="{% translate 'Photo' %}" class="w-full"></a>
-            
-            <div class="p-4 flex items-center justify-between gap-3">
-              {% if result.event == "no-album" %}
-                {% translate "No album." %}
-              {% else %}
-                <p class="font-semibold text-declic-charcoal">{% translate "Event : " %}{{ result.event }} </p>
-
-              {% endif %}
-                <p class="text-xs text-declic-grey">{% translate "Date :" %} {{ result.date }} </p>
-                            
-            </div>
-            <div class="flex items-center gap-2">
-              <span class="badge-lime">{{ result.score }}</span>
-              <label class="flex items-center gap-1.5 cursor-pointer text-xs text-declic-grey">
-                <input type="checkbox" name="photo_ids" value="{{ result.photo_id }}">
-                {% translate "Select" %}
-              </label>
-              </div>
-              
-            </div>
-            {% endfor %}
-        </div>
-      </form>
-  
-  {% elif request.method == "POST" %}
-    <div class="declic-card p-10 text-center text-declic-grey">
-        {% translate "No results found." %}
-    </div>
-  {% endif %}
+  <section class="max-w-6xl mx-auto px-6 py-10" id="search-results">
+    {% include "search/_results.html" %}
   </section>
 
   <section class="max-w-6xl mx-auto px-6 pb-12">

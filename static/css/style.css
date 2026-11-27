@@ -457,3 +457,25 @@ input[type="checkbox"] {
     height: 1px;
     background-color: var(--declic-border);
 }
+
+
+
+/* Indicateur de chargement HTMX */
+.htmx-indicator {
+    display: none;
+    color: var(--declic-charcoal);
+}
+
+.htmx-indicator.htmx-request {
+    display: block;
+    animation: htmx-pulse 1.2s ease-in-out infinite;
+}
+
+@keyframes htmx-pulse {
+    0%, 100% {
+        opacity: 0.45;
+    }
+    50% {
+        opacity: 1;
+    }
+}

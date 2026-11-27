@@ -21,6 +21,8 @@ def home(request):
                 queue="search",
             )
             results = task.get(timeout=30)
+            if request.headers.get("HX-Request"):
+                return render(request, "search/_results.html", {"results": results})
             return render(request, "search/home.html", {"results": results})
     return render(request, "search/home.html")
 
