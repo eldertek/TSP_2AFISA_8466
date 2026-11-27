@@ -2,16 +2,104 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <style>* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body.error-500-page {
+    min-height: 100vh;
+    background-color: #FFFFFF;
+    color: #1F2433;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    display: flex;
+    flex-direction: column;
+}
+
+.error-500-header {
+    background-color: #1F2433;
+    border-bottom: 3px solid #AAF1E1;
+    padding: 1rem 1.5rem;
+}
+
+.error-500-brand {
+    max-width: 72rem;
+    margin: 0 auto;
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: #FFFFFF;
+    text-decoration: none;
+    letter-spacing: 0.02em;
+}
+
+.error-500-brand span {
+    color: #E57B9E;
+}
+
+.error-500-main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 3rem 1.5rem;
+}
+
+.error-500-code {
+    font-size: clamp(5.5rem, 15vw, 10rem);
+    font-weight: 900;
+    line-height: 1;
+    color: #1F2433;
+    letter-spacing: 0.04em;
+}
+
+.error-500-code .zero-pink {
+    color: #E57B9E;
+}
+
+.error-500-code .zero-sky {
+    color: #86C9F4;
+}
+
+.error-500-msg {
+    margin-top: 1.5rem;
+    font-size: 1.125rem;
+    color: #5F6478;
+    max-width: 32rem;
+}
+
+.error-500-btn {
+    display: inline-block;
+    margin-top: 2rem;
+    padding: 0.75rem 1.5rem;
+    background-color: #E57B9E;
+    color: #FFFFFF;
+    font-weight: 700;
+    text-decoration: none;
+    border-radius: 0.65rem;
+    transition: background-color 0.2s ease, transform 0.15s ease;
+}
+
+.error-500-btn:hover {
+    background-color: #D46087;
+    transform: translateY(-1px);
+}</style>
+
   <title>500 - INTêtes</title>
 </head>
-<body class="bg-slate-50 text-slate-900">
-  <main class="mx-auto max-w-6xl p-8">
-    <h1 class="text-3xl font-bold text-black">500</h1>
-    <h2 class="text-2xl font-bold text-lime-500">INTêtes</h2>
-    <p class="mt-2 text-slate-600">An internal server error occurred. Please try again later.</p>
+<body class="error-500-page">
+<header class="error-500-header">
+  <a href="/" class="error-500-brand">IN<span>Têtes</span></a>
+</header>
+  <main class="error-500-main">
+    <h1 class="error-500-code">5
+    <span class="zero-pink">0</span>
+    <span class="zero-sky">0</span></h1>
+    <p class="error-500-msg">An internal server error occurred. Please try again later.</p>
     <div class="mt-6">
-      <a href="/" class="bg-lime-500 text-white px-4 py-2 rounded">Back to home</a>
+      <a href="/" class="error-500-btn">Back to home</a>
     </div>
   </main>
 </body>
